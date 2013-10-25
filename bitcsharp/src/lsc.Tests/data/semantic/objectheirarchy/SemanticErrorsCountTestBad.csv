@@ -1,0 +1,7 @@
+path,description
+1,class not declared
+2, more than one public private protected member modifiers
+3, local variable redeclaration of local & global variables
+4, duplicate constructor
+4.1, duplicate methods
+4.2, duplicate accessors

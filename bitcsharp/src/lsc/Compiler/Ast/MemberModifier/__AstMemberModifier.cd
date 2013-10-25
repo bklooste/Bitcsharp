@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="LLVMSharp.Compiler.Ast.AstMemberModifier" Collapsed="true">
+    <Position X="13.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\MemberModifier\_AstMemberModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstMemberModifierCollection" Collapsed="true">
+    <Position X="15.75" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\MemberModifier\_AstMemberModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstVirtualMemberModifier" Collapsed="true">
+    <Position X="15" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\MemberModifier\AstVirtualMemberModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstExternMemberModifier" Collapsed="true">
+    <Position X="20" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\MemberModifier\AstExternMemberModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstOverrideMemberModifier" Collapsed="true">
+    <Position X="5.25" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\MemberModifier\AstOverrideMemberModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstPrivateMemberModifier" Collapsed="true">
+    <Position X="10.25" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\MemberModifier\AstPrivateMemberModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstProtectedMemberModifier" Collapsed="true">
+    <Position X="17.5" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\MemberModifier\AstProtectedMemberModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstPublicMemberModifier" Collapsed="true">
+    <Position X="22.5" Y="3.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\MemberModifier\AstPublicMemberModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstSealedMemberModifier" Collapsed="true">
+    <Position X="7.75" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\MemberModifier\AstSealedMemberModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstStaticMemberModifier" Collapsed="true">
+    <Position X="12.75" Y="3.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\MemberModifier\AstStaticMemberModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstNode" Collapsed="true">
+    <Position X="13.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIEAAAIAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\RootNodes\__AstNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F2171B4C-9186-4EA1-98AF-20469258BC85}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LLVMSharp.Compiler.CodeGenerators</RootNamespace>
+    <AssemblyName>lsc.llvmsharp</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\output\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;INFO_COMMENT COMMENTS_PATH</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\output\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EmitCode.cs" />
+    <Compile Include="Expressions\BinaryExpression\Add.cs" />
+    <Compile Include="Expressions\BinaryExpression\Assignment\AddAssign.cs" />
+    <Compile Include="Expressions\BinaryExpression\Assignment\SubAssign.cs" />
+    <Compile Include="Expressions\BinaryExpression\Assignment\DivAssign.cs" />
+    <Compile Include="Expressions\BinaryExpression\Assignment\MulAssign.cs" />
+    <Compile Include="Expressions\BinaryExpression\Div.cs" />
+    <Compile Include="Expressions\BinaryExpression\Equality\NotEqual.cs" />
+    <Compile Include="Expressions\BinaryExpression\Equality\Equal.cs" />
+    <Compile Include="Expressions\BinaryExpression\Logical\And.cs" />
+    <Compile Include="Expressions\BinaryExpression\Logical\Or.cs" />
+    <Compile Include="Expressions\BinaryExpression\Mul.cs" />
+    <Compile Include="Expressions\BinaryExpression\Sub.cs" />
+    <Compile Include="Expressions\Constants\Boolean.cs" />
+    <Compile Include="Expressions\Constants\Float.cs" />
+    <Compile Include="Expressions\Constants\String.cs" />
+    <Compile Include="Expressions\Constants\Int32.cs" />
+    <Compile Include="Expressions\NewType.cs" />
+    <Compile Include="Expressions\Null.cs" />
+    <Compile Include="Expressions\Relational\GreaterThanOrEqual.cs" />
+    <Compile Include="Expressions\Relational\GreaterThan.cs" />
+    <Compile Include="Expressions\Relational\LesserThanOrEqual.cs" />
+    <Compile Include="Expressions\Relational\LesserThan.cs" />
+    <Compile Include="Expressions\Unary\PostDecrement.cs" />
+    <Compile Include="Expressions\Unary\PostIncrement.cs" />
+    <Compile Include="Expressions\Unary\PreDecrement.cs" />
+    <Compile Include="Expressions\Unary\PreIncrement.cs" />
+    <Compile Include="Expressions\Unary\Not.cs" />
+    <Compile Include="Expressions\Unary\UnaryMinus.cs" />
+    <Compile Include="Expressions\Unary\UnaryPlus.cs" />
+    <Compile Include="Expressions\VarRef.cs" />
+    <Compile Include="LLVMNames.cs" />
+    <Compile Include="EntryPoint.cs" />
+    <Compile Include="ObjectLayout\ClassObjectLayout.cs" />
+    <Compile Include="ObjectLayout\StructObjectLayout.cs" />
+    <Compile Include="ObjectLayout\_ObjectLayout.cs" />
+    <Compile Include="Expressions\Assignment\SimpleAssignment.cs" />
+    <Compile Include="Statements\Conditional\ForLoop.cs" />
+    <Compile Include="Statements\Conditional\WhileLoop.cs" />
+    <Compile Include="Statements\Conditional\DoLoop.cs" />
+    <Compile Include="Statements\Conditional\IfCondition.cs" />
+    <Compile Include="Statements\AstBlock.cs" />
+    <Compile Include="Statements\_Statement.cs" />
+    <Compile Include="Statements\Return.cs" />
+    <Compile Include="Statements\MethodCall.cs" />
+    <Compile Include="Statements\LocalVarDecl.cs" />
+    <Compile Include="Statements\Assignment.cs" />
+    <Compile Include="Tables\Enum.cs" />
+    <Compile Include="Tables\StringTable.cs" />
+    <Compile Include="Tables\IntegerTable.cs" />
+    <Compile Include="_LLVMSharpCodeGenerator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Methods.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\lsc.llvm\lsc.llvm.csproj">
+      <Project>{0A8870A2-6921-40BF-A197-B7BCE0B217AD}</Project>
+      <Name>lsc.llvm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\lsc\lsc.csproj">
+      <Project>{A4EDACDD-8E40-4F18-86F6-052B827FC9FF}</Project>
+      <Name>lsc</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

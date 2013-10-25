@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="LLVMSharp.Compiler.Ast.AstNode" Collapsed="true">
+    <Position X="6.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIEAAAIAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\RootNodes\__AstNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstPrivateTypeModifier" Collapsed="true">
+    <Position X="5.25" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\TypeModifiers\AstPrivateTypeModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstProtectedTypeModifier" Collapsed="true">
+    <Position X="7.5" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\TypeModifiers\AstProtectedTypeModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstPublicTypeModifier" Collapsed="true">
+    <Position X="9.75" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\TypeModifiers\AstPublicTypeModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstSealedTypeModifier" Collapsed="true">
+    <Position X="2.75" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\TypeModifiers\AstSealedTypeModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstTypeModifier" Collapsed="true">
+    <Position X="6.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\TypeModifiers\_AstTypeModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstTypeModifierCollection" Collapsed="true">
+    <Position X="8.5" Y="2.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\TypeModifiers\_AstTypeModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

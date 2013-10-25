@@ -1,0 +1,24 @@
+__llvmsharp_gc_init()
+__llvmsharp_gc_maxHeapSize = 130
+gc_alloc = sizeWithHdr:28, ptrCount:0
+	heap used before alloc: 0
+	addr: 0x651828
+	heap used after alloc: 28
+gc_alloc = sizeWithHdr:40, ptrCount:3
+	heap used before alloc: 28
+	addr: 0x651868
+	heap used after alloc: 68
+gc_alloc = sizeWithHdr:28, ptrCount:0
+	heap used before alloc: 68
+	addr: 0x651898
+	heap used after alloc: 96
+gc_alloc = sizeWithHdr:36, ptrCount:1
+	heap used before alloc: 96
+	heap full. starting auto collect
+gc_collect() heapUsedBeforeCollect:96
+	0x651898 0x651868 0x651828 
+	heapUsedAfterCollect:96
+	Couldn't allocate gc object. HEAP full. aborting...
+	Current heap size: 96
+	Requested new object size: 36
+	Failed by: 132 - 130 = 2

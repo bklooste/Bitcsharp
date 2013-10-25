@@ -1,0 +1,9 @@
+*
+!.gitignore
+!lli.exe
+!llc.exe
+!llvm-stub.exe
+!llvm-link.exe
+!llvm-ld.exe
+!llvm-as.exe
+

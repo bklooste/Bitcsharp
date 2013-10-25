@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0A8870A2-6921-40BF-A197-B7BCE0B217AD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>lsc.llvm</RootNamespace>
+    <AssemblyName>lsc.llvm</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\output\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\output\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Constants\FloatConstant.cs" />
+    <Compile Include="Constants\I32Constant.cs" />
+    <Compile Include="Constants\StringConstant.cs" />
+    <Compile Include="Constants\_Constant.cs" />
+    <Compile Include="ICodeGenerator.cs" />
+    <Compile Include="Instruction\Alloca.cs" />
+    <Compile Include="Instruction\BinaryOperations\Add.cs" />
+    <Compile Include="Instruction\Bitwise\_BitwiseOperation.cs" />
+    <Compile Include="Instruction\ConversionOperations\Zext.cs" />
+    <Compile Include="Instruction\ConversionOperations\_ConversionOperation.cs" />
+    <Compile Include="Instruction\BinaryOperations\FDiv.cs" />
+    <Compile Include="Instruction\BinaryOperations\FRem.cs" />
+    <Compile Include="Instruction\BinaryOperations\Mul.cs" />
+    <Compile Include="Instruction\BinaryOperations\SDiv.cs" />
+    <Compile Include="Instruction\BinaryOperations\SRem.cs" />
+    <Compile Include="Instruction\BinaryOperations\Sub.cs" />
+    <Compile Include="Instruction\BinaryOperations\UDiv.cs" />
+    <Compile Include="Instruction\BinaryOperations\URem.cs" />
+    <Compile Include="Instruction\BinaryOperations\_BinaryOperation.cs" />
+    <Compile Include="Instruction\Branch\ConditionalBranch.cs" />
+    <Compile Include="Instruction\Branch\UnConditionalBranch.cs" />
+    <Compile Include="Instruction\Branch\_Branch.cs" />
+    <Compile Include="Instruction\Call.cs" />
+    <Compile Include="Instruction\BitCast.cs" />
+    <Compile Include="Instruction\Bitwise\Xor.cs" />
+    <Compile Include="Instruction\FCmp.cs" />
+    <Compile Include="Instruction\Label.cs" />
+    <Compile Include="Instruction\ICmp.cs" />
+    <Compile Include="Instruction\GetElementPtr.cs" />
+    <Compile Include="Instruction\Load.cs" />
+    <Compile Include="Instruction\Return.cs" />
+    <Compile Include="Instruction\ReturnVoid.cs" />
+    <Compile Include="Instruction\Store.cs" />
+    <Compile Include="Instruction\_Instruction.cs" />
+    <Compile Include="LinkageType.cs" />
+    <Compile Include="Module.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Variable.cs" />
+    <Compile Include="_ModulePart.cs" />
+    <Compile Include="__Helpers.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\lsc\lsc.csproj">
+      <Project>{A4EDACDD-8E40-4F18-86F6-052B827FC9FF}</Project>
+      <Name>lsc</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Instruction\__Instructions.cd" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

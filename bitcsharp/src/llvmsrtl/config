@@ -1,0 +1,26 @@
+#please set the root directory from makefile.inc
+
+# PLEASE SET THE VALUE TO EITHER 1 OR 0
+# TRUE = 1
+# FALSE = 0
+USE_C_STDLIB = 1
+
+# Target Type
+# 0 = Exe
+# 1 = Library
+# 2 = WinExe
+TARGET_TYPE = 0
+
+# OS_TYPE - linux,windows
+OSTYPE = windows
+
+# ARCH - x86
+ARCH = x86
+
+ASM_ARCH = x86
+CC = llvm-gcc
+ASM = i386-elf-as
+
+LOG_GC = 1
+
+ASM_FILE = llvmsrtl.s

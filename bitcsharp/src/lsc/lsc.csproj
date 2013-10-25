@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A4EDACDD-8E40-4F18-86F6-052B827FC9FF}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LLVMSharp</RootNamespace>
+    <AssemblyName>lsc</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\output\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="C5, Version=1.0.2.0, Culture=neutral, PublicKeyToken=06a1b38866503b69, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\plossum-commandline\lib\C5.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Compiler\AssembleAndLink.cs" />
+    <Compile Include="Compiler\Assembler\Assembler.cs" />
+    <Compile Include="Compiler\Assembler\LLVMAssembler.cs" />
+    <Compile Include="Compiler\Ast\AstArgument.cs" />
+    <Compile Include="Compiler\Ast\AstArrayInitialization.cs" />
+    <Compile Include="Compiler\Ast\AstAsExpression.cs" />
+    <Compile Include="Compiler\Ast\AstBlock.cs" />
+    <Compile Include="Compiler\Ast\AstBreak.cs" />
+    <Compile Include="Compiler\Ast\AstContinue.cs" />
+    <Compile Include="Compiler\Ast\AstIndexer.cs" />
+    <Compile Include="Compiler\Ast\AstIsExpression.cs" />
+    <Compile Include="Compiler\Ast\AstNamespaceBlock.cs" />
+    <Compile Include="Compiler\Ast\AstNewType.cs" />
+    <Compile Include="Compiler\Ast\AstNull.cs" />
+    <Compile Include="Compiler\Ast\AstParameter.cs" />
+    <Compile Include="Compiler\Ast\AstReturn.cs" />
+    <Compile Include="Compiler\Ast\AstSizeOf.cs" />
+    <Compile Include="Compiler\Ast\AstStatement.cs" />
+    <Compile Include="Compiler\Ast\AstTypeCast.cs" />
+    <Compile Include="Compiler\Ast\AstTypeOf.cs" />
+    <Compile Include="Compiler\Ast\AstUsingDeclarative.cs" />
+    <Compile Include="Compiler\Ast\AstVariableReference.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\AdditionExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\AstAndExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\Assignment\AddAssignmentExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\Assignment\DivisionAssignmentExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\Assignment\MultiplyAssignmentExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\Assignment\SimpleAssignmentExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\Assignment\SubtractAssignmentExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\Assignment\_AssignmentExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\AstDivisionExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\EqualityExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\AstGreaterThanExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\GreaterThanOrEqualExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\InequalityExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\LesserThanExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\AstLesserThanOrEqualExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\MuliplicationExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\OrExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\SubtractionExpression.cs" />
+    <Compile Include="Compiler\Ast\BinaryExpression\_BinaryExpression.cs" />
+    <Compile Include="Compiler\Ast\Constants\BooleanConstant.cs" />
+    <Compile Include="Compiler\Ast\Constants\AstCharConstant.cs" />
+    <Compile Include="Compiler\Ast\Constants\FloatConstant.cs" />
+    <Compile Include="Compiler\Ast\Constants\Int32Constant.cs" />
+    <Compile Include="Compiler\Ast\Constants\StringConstant.cs" />
+    <Compile Include="Compiler\Ast\Constants\_Constant.cs" />
+    <Compile Include="Compiler\Ast\LiteralVarReference.cs" />
+    <Compile Include="Compiler\Ast\MemberModifier\AstExternMemberModifier.cs" />
+    <Compile Include="Compiler\Ast\MemberModifier\AstOverrideMemberModifier.cs" />
+    <Compile Include="Compiler\Ast\MemberModifier\AstPrivateMemberModifier.cs" />
+    <Compile Include="Compiler\Ast\MemberModifier\AstProtectedMemberModifier.cs" />
+    <Compile Include="Compiler\Ast\MemberModifier\AstPublicMemberModifier.cs" />
+    <Compile Include="Compiler\Ast\MemberModifier\AstSealedMemberModifier.cs" />
+    <Compile Include="Compiler\Ast\MemberModifier\AstStaticMemberModifier.cs" />
+    <Compile Include="Compiler\Ast\MemberModifier\AstVirtualMemberModifier.cs" />
+    <Compile Include="Compiler\Ast\MemberModifier\_AstMemberModifier.cs" />
+    <Compile Include="Compiler\Ast\MemberReference.cs" />
+    <Compile Include="Compiler\Ast\ObjectMembers\AstAccessor.cs" />
+    <Compile Include="Compiler\Ast\ObjectMembers\AstConstructor.cs" />
+    <Compile Include="Compiler\Ast\ObjectMembers\AstExplicitTypeConverter.cs" />
+    <Compile Include="Compiler\Ast\ObjectMembers\AstField.cs" />
+    <Compile Include="Compiler\Ast\ObjectMembers\AstGetAccessor.cs" />
+    <Compile Include="Compiler\Ast\ObjectMembers\AstImplicitTypeConverter.cs" />
+    <Compile Include="Compiler\Ast\ObjectMembers\AstMethod.cs" />
+    <Compile Include="Compiler\Ast\ObjectMembers\AstMethodCall.cs" />
+    <Compile Include="Compiler\Ast\ObjectMembers\AstOperatorOverload.cs" />
+    <Compile Include="Compiler\Ast\ObjectMembers\AstSetAccessor.cs" />
+    <Compile Include="Compiler\Ast\ObjectMembers\AstTypeConverter.cs" />
+    <Compile Include="Compiler\Ast\ObjectMembers\ConstructorCall\AstBaseConstructorCall.cs" />
+    <Compile Include="Compiler\Ast\ObjectMembers\ConstructorCall\AstThisConstructorCall.cs" />
+    <Compile Include="Compiler\Ast\ObjectMembers\ConstructorCall\_AstConstructorCall.cs" />
+    <Compile Include="Compiler\Ast\ObjectMembers\_IObjectMember.cs" />
+    <Compile Include="Compiler\Ast\ParameterType\AstPassByRefParameterType.cs" />
+    <Compile Include="Compiler\Ast\ParameterType\AstPassByValueParameterType.cs" />
+    <Compile Include="Compiler\Ast\ParameterType\_AstParameterType.cs" />
+    <Compile Include="Compiler\Ast\RootNodes\AstProgram.cs" />
+    <Compile Include="Compiler\Ast\RootNodes\AstSourceFile.cs" />
+    <Compile Include="Compiler\Ast\RootNodes\__AstNode.cs" />
+    <Compile Include="Compiler\Ast\RootNodes\__BaseMinimumAstNode.cs" />
+    <Compile Include="Compiler\Ast\Statements\AssignmentStatement.cs" />
+    <Compile Include="Compiler\Ast\Statements\AstLocalVariableDeclaration.cs" />
+    <Compile Include="Compiler\Ast\Statements\Conditional\AstConditional.cs" />
+    <Compile Include="Compiler\Ast\Statements\Conditional\AstIfCondtion.cs" />
+    <Compile Include="Compiler\Ast\Statements\Loops\AstDoLoop.cs" />
+    <Compile Include="Compiler\Ast\Statements\Loops\AstForLoop.cs" />
+    <Compile Include="Compiler\Ast\Statements\Loops\AstWhileLoop.cs" />
+    <Compile Include="Compiler\Ast\Statements\Loops\_AstLoop.cs" />
+    <Compile Include="Compiler\Ast\TypeModifiers\AstPrivateTypeModifier.cs" />
+    <Compile Include="Compiler\Ast\TypeModifiers\AstProtectedTypeModifier.cs" />
+    <Compile Include="Compiler\Ast\TypeModifiers\AstPublicTypeModifier.cs" />
+    <Compile Include="Compiler\Ast\TypeModifiers\AstSealedTypeModifier.cs" />
+    <Compile Include="Compiler\Ast\TypeModifiers\_AstTypeModifier.cs" />
+    <Compile Include="Compiler\Ast\Types\AstChildClassCollection.cs" />
+    <Compile Include="Compiler\Ast\Types\Astclass.cs" />
+    <Compile Include="Compiler\Ast\Types\AstEnum.cs" />
+    <Compile Include="Compiler\Ast\Types\AstEnumMember.cs" />
+    <Compile Include="Compiler\Ast\Types\AstEnumType.cs" />
+    <Compile Include="Compiler\Ast\Types\AstParentClass.cs" />
+    <Compile Include="Compiler\Ast\Types\AstStruct.cs" />
+    <Compile Include="Compiler\Ast\Types\_AstType.cs" />
+    <Compile Include="Compiler\Ast\Unary\AstNot.cs" />
+    <Compile Include="Compiler\Ast\Unary\AstPostDecrement.cs" />
+    <Compile Include="Compiler\Ast\Unary\AstPostIncrement.cs" />
+    <Compile Include="Compiler\Ast\Unary\AstPreDecrement.cs" />
+    <Compile Include="Compiler\Ast\Unary\AstPreIncrement.cs" />
+    <Compile Include="Compiler\Ast\Unary\AstUnaryMinus.cs" />
+    <Compile Include="Compiler\Ast\Unary\AstUnaryPlus.cs" />
+    <Compile Include="Compiler\Ast\_IAssociatedType.cs" />
+    <Compile Include="Compiler\Ast\_IAstExpression.cs" />
+    <Compile Include="Compiler\Ast\_IAstHasExpressions.cs" />
+    <Compile Include="Compiler\Ast\_IAstNamespaceMember.cs" />
+    <Compile Include="Compiler\CocoR\IParser.cs" />
+    <Compile Include="Compiler\CocoR\IScanner.cs" />
+    <Compile Include="Compiler\CocoR\IToken.cs" />
+    <Compile Include="Compiler\CocoR\Parser.cs" />
+    <Compile Include="Compiler\CocoR\Scanner.cs" />
+    <Compile Include="Compiler\CodeGenerator\AstNodesCodeGenerator.cs" />
+    <Compile Include="Compiler\CodeGenerator\CodeGenerator.cs" />
+    <Compile Include="Compiler\CodeGenerator\ICodeEmitor.cs" />
+    <Compile Include="Compiler\CodeGenerator\LLVM\Body\Body.cs" />
+    <Compile Include="Compiler\CodeGenerator\LLVM\Body\Expressions\BinaryExpressions\AdditionExpression.cs" />
+    <Compile Include="Compiler\CodeGenerator\LLVM\Body\Expressions\BinaryExpressions\DivisionExpression.cs" />
+    <Compile Include="Compiler\CodeGenerator\LLVM\Body\Expressions\BinaryExpressions\MultiplicationExpression.cs" />
+    <Compile Include="Compiler\CodeGenerator\LLVM\Body\Expressions\BinaryExpressions\SubtractionExpression.cs" />
+    <Compile Include="Compiler\CodeGenerator\LLVM\Body\Expressions\BinaryExpressions\_BinaryExpression.cs" />
+    <Compile Include="Compiler\CodeGenerator\LLVM\Body\Expressions\Constants\Constants.cs" />
+    <Compile Include="Compiler\CodeGenerator\LLVM\Body\Expressions\Expression.cs" />
+    <Compile Include="Compiler\CodeGenerator\LLVM\MethodTable.cs" />
+    <Compile Include="Compiler\CodeGenerator\LLVM\_CodeGenerator.cs" />
+    <Compile Include="Compiler\CodeGenerator\Writer\CodeWriter.cs" />
+    <Compile Include="Compiler\CodeGenerator\Writer\Comments.cs" />
+    <Compile Include="Compiler\CodeGenerator\Writer\DebugComments.cs" />
+    <Compile Include="Compiler\CodeGenerator\Writer\IndentWriter.cs" />
+    <Compile Include="Compiler\CodeGenerator\Writer\InfoComments.cs" />
+    <Compile Include="Compiler\ComandLineOptions\ComamndLineOptions.cs" />
+    <Compile Include="Compiler\ComandLineOptions\Options.cs" />
+    <Compile Include="Compiler\ComandLineOptions\Target.cs" />
+    <Compile Include="Compiler\CompilerPhases.cs" />
+    <Compile Include="Compiler\EntryPoint.cs" />
+    <Compile Include="Compiler\ErrorList.cs" />
+    <Compile Include="Compiler\Exception\_LLVMSharpException.cs" />
+    <Compile Include="Compiler\IEntryPoint.cs" />
+    <Compile Include="Compiler\Walkers\UsingDirectivesWalker.cs" />
+    <Compile Include="Compiler\Walkers\_Walker.cs" />
+    <Compile Include="Compiler\Linker\LLVMLd.cs" />
+    <Compile Include="Compiler\Linker\Linker.cs" />
+    <Compile Include="Compiler\Linker\LLVMLinker.cs" />
+    <Compile Include="Compiler\LLVMIntepreter.cs" />
+    <Compile Include="Compiler\LLVMSharpCompiler.cs" />
+    <Compile Include="Compiler\Mangler.cs" />
+    <Compile Include="Compiler\Semantic\ClassHierarchyNode.cs" />
+    <Compile Include="Compiler\Semantic\ObjectHierarchy.cs" />
+    <Compile Include="Compiler\Semantic\ObjectHierarchy2.cs" />
+    <Compile Include="Compiler\Semantic\SymbolTableNode.cs" />
+    <Compile Include="Compiler\StandardInputOutputs.cs" />
+    <Compile Include="Compiler\TypeChecker.cs" />
+    <Compile Include="Compiler\UsingDirectives\UsingDirectives.cs" />
+    <Compile Include="Compiler\UsingDirectives\UsingObject.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Compiler\Ast\AstClasses.cd" />
+    <None Include="Compiler\Ast\BinaryExpression\__BinaryExpression.cd" />
+    <None Include="Compiler\Ast\Constants\__Constants.cd" />
+    <None Include="Compiler\Ast\MemberModifier\__AstMemberModifier.cd" />
+    <None Include="Compiler\Ast\ParameterType\__AstParameterType.cd" />
+    <None Include="Compiler\Ast\RootNodes\___AstNodes.cd" />
+    <None Include="Compiler\Ast\TypeModifiers\__AstTypeModifiers.cd" />
+    <None Include="Compiler\Ast\Types\__AstType.cd" />
+    <None Include="Compiler\CocoR\LLVMSharp.atg">
+      <Generator>CocoR</Generator>
+      <LastGenOutput>LLVMSharp.Parser.cs</LastGenOutput>
+    </None>
+    <Compile Include="Compiler\Semantic\SemanticAnalysis.cs" />
+    <None Include="Compiler\CocoR\Parser.Frame" />
+    <None Include="Compiler\CocoR\Scanner.Frame" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\lib\MatrixLibrary\src\MatrixLibrary.csproj">
+      <Project>{71E12F3D-6DB7-487B-9BB7-92FF962DBB8F}</Project>
+      <Name>MatrixLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\lib\plossum-commandline\src\Plossum\Plossum.csproj">
+      <Project>{156BF637-7F50-4EC8-8476-D4E162335364}</Project>
+      <Name>Plossum</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Compiler\CodeGenerator\LLVM\Helpers\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

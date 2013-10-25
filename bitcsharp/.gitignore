@@ -1,0 +1,20 @@
+# Visual Studio specific ignore files
+*.suo
+
+bin/
+obj/
+
+*.user
+
+# LLVMSharp Specific ignore files
+*.Parser.cs*
+*.Scanner.cs*
+
+TestResults/
+
+_ReSharper.*/
+
+/src/llvm-test/*
+
+*.swp
+*.orig

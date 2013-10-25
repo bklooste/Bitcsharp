@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="LLVMSharp.Compiler.Ast.AstBinaryExpression">
+    <Position X="4.25" Y="0.5" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAABAAAIAgEAAAAAgAAAAA=</HashCode>
+      <FileName>Compiler\Ast\BinaryExpression\_BinaryExpression.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstAdditionExpression" Collapsed="true">
+    <Position X="0.75" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\BinaryExpression\AdditionExpression.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstSubtractionExpression" Collapsed="true">
+    <Position X="3" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\BinaryExpression\SubtractionExpression.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstMuliplicationExpression" Collapsed="true">
+    <Position X="5.25" Y="3" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAABAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\BinaryExpression\MuliplicationExpression.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstDivisionExpression" Collapsed="true">
+    <Position X="7.75" Y="3" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\BinaryExpression\DivisionExpression.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstEqualityExpression" Collapsed="true">
+    <Position X="3" Y="4.25" Width="1.75" />
+    <InheritanceLine Type="LLVMSharp.Compiler.Ast.AstBinaryExpression" ManuallyRouted="true">
+      <Path>
+        <Point X="5.125" Y="2.444" />
+        <Point X="5.125" Y="4.179" />
+        <Point X="3.875" Y="4.179" />
+        <Point X="3.875" Y="4.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAABAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\BinaryExpression\EqualityExpression.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstInequalityExpression" Collapsed="true">
+    <Position X="5.25" Y="4.25" Width="2" />
+    <InheritanceLine Type="LLVMSharp.Compiler.Ast.AstBinaryExpression" ManuallyRouted="true">
+      <Path>
+        <Point X="5.125" Y="2.444" />
+        <Point X="5.125" Y="4.151" />
+        <Point X="6.25" Y="4.151" />
+        <Point X="6.25" Y="4.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAABAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\BinaryExpression\InequalityExpression.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstLesserThanOrEqualExpression" Collapsed="true">
+    <Position X="2.75" Y="5.75" Width="2.5" />
+    <InheritanceLine Type="LLVMSharp.Compiler.Ast.AstBinaryExpression" ManuallyRouted="true">
+      <Path>
+        <Point X="5.125" Y="2.444" />
+        <Point X="5.125" Y="5.45" />
+        <Point X="4" Y="5.45" />
+        <Point X="4" Y="5.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAABAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\BinaryExpression\LesserThanOrEqualExpression.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstGreaterThanExpression" Collapsed="true">
+    <Position X="5.5" Y="5.75" Width="2" />
+    <InheritanceLine Type="LLVMSharp.Compiler.Ast.AstBinaryExpression" ManuallyRouted="true">
+      <Path>
+        <Point X="5.125" Y="2.444" />
+        <Point X="5.125" Y="5.45" />
+        <Point X="6.5" Y="5.45" />
+        <Point X="6.5" Y="5.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAABAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\BinaryExpression\GreaterThanExpression.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstGreaterThanOrEqualExpression" Collapsed="true">
+    <Position X="7.75" Y="5.75" Width="2.5" />
+    <InheritanceLine Type="LLVMSharp.Compiler.Ast.AstBinaryExpression" ManuallyRouted="true">
+      <Path>
+        <Point X="5.125" Y="2.444" />
+        <Point X="5.164" Y="2.7" />
+        <Point X="5.164" Y="5.45" />
+        <Point X="9" Y="5.45" />
+        <Point X="9" Y="5.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAABAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\BinaryExpression\GreaterThanOrEqualExpression.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstLesserThanExpression" Collapsed="true">
+    <Position X="0.5" Y="5.75" Width="2" />
+    <InheritanceLine Type="LLVMSharp.Compiler.Ast.AstBinaryExpression" ManuallyRouted="true">
+      <Path>
+        <Point X="5.125" Y="2.444" />
+        <Point X="5.125" Y="5.45" />
+        <Point X="1.5" Y="5.45" />
+        <Point X="1.5" Y="5.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAABAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\BinaryExpression\LesserThanExpression.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="LLVMSharp.Compiler.Ast.IAstExpression" Collapsed="true">
+    <Position X="6.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\Ast\_IAstExpression.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

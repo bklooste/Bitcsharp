@@ -1,0 +1,44 @@
+﻿source code, description
+1.cs, int string test
+2.cs, int test
+4.cs, if without else test for a variable as condition
+5.cs, if with else test for a variable as condition
+6.cs, nested if else test for a variable as condition
+7.cs, if conditions with true false keywords
+8.cs, unary plus
+9.cs, unary minus with integer
+10.cs, unary not
+11.cs, PreIncrement
+12.cs, PreDecrement
+13.cs, PostIncrement
+14.cs, PostDecrement
+15.cs, logical and
+16.cs, logical or
+17.cs, integer equality
+18.cs, boolean equality
+19.cs, string equality
+20.cs, integer inequality
+21.cs, boolean inequality
+22.cs, string inquality
+23.cs, int less than
+24.cs, int less than or equal
+25.cs, int greater than
+26.cs, int greater than or equal
+27.cs, return if it doesnt contain expression
+28.cs, post increment as single statement
+29.cs, post decrement as single statement
+31.cs, float addassign,mulassign,divassign,subassign
+32.cs, float boolean comparisons
+33.cs, var ref collection for int fields
+34.cs, PostIncrement int32 for fields
+35.cs, string assignment/retrival for fields
+36.cs, extern Method call
+37.cs, static method call from same class
+38.cs, static method call from base and this class
+39.cs, static method call from other class
+40.cs, ctor call
+41.cs, local var function
+42.cs, test for method call inside while loop
+43.cs, new object() - not part of init but part of simple assignment
+44.cs, access field members from non static functions
+45.cs, string concat

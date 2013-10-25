@@ -1,0 +1,5 @@
+path,description
+1.cs,using namespace not allowed inside namespace
+2.cs,using namespace not allowed at the end
+3.cs,only int,char allowed for enum inheritence
+4.cs,multiple inheritence not allowed, coz multiple inheritence implentations doesnt need to be checked at all

@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="LLVMSharp.Compiler.Ast.AstConstant" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Compiler\AST\Constants\_Constant.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstStringConstant" Collapsed="true">
+    <Position X="3" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Compiler\AST\Constants\StringConstant.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstBooleanConstant" Collapsed="true">
+    <Position X="7.25" Y="2" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Compiler\AST\Constants\BooleanConstant.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstFloatConstant" Collapsed="true">
+    <Position X="0.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Compiler\AST\Constants\FloatConstant.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLVMSharp.Compiler.Ast.AstInt32Constant" Collapsed="true">
+    <Position X="5.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Compiler\AST\Constants\Int32Constant.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

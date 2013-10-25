@@ -1,0 +1,3 @@
+build/llvmsrtl.bc
+build/llvmsrtl.ll
+build/libllvmsrtl.a

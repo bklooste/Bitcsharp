@@ -1,0 +1,30 @@
+__llvmsharp_gc_init()
+__llvmsharp_gc_maxHeapSize = 175
+gc_alloc = sizeWithHdr:28, ptrCount:0
+	heap used before alloc: 0
+	addr: 0x391828
+	heap used after alloc: 28
+gc_alloc = sizeWithHdr:40, ptrCount:3
+	heap used before alloc: 28
+	addr: 0x391868
+	heap used after alloc: 68
+gc_alloc = sizeWithHdr:28, ptrCount:0
+	heap used before alloc: 68
+	addr: 0x391898
+	heap used after alloc: 96
+gc_alloc = sizeWithHdr:36, ptrCount:1
+	heap used before alloc: 96
+	addr: 0x3918d8
+	heap used after alloc: 132
+gc_alloc = sizeWithHdr:28, ptrCount:0
+	heap used before alloc: 132
+	addr: 0x391908
+	heap used after alloc: 160
+gc_alloc = sizeWithHdr:36, ptrCount:1
+	heap used before alloc: 160
+	heap full. starting auto collect
+gc_collect() heapUsedBeforeCollect:160
+	0x391908 0x3918d8~ 0x391898~ 0x391868 0x391828 
+	heapUsedAfterCollect:96
+	addr: 0x3918d8
+	heap used after alloc: 132

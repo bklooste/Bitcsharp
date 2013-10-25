@@ -1,0 +1,1243 @@
+// namespace = LLVMSharp.Compiler
+/* The first line above can be used to determine the namespace.
+ * If Nothing is or invalid namespace grammar is specified, it will
+ * use the default namespace, which is the ProjectName.Folder.SubFolder
+ * and so on...
+ * To use no namespace at all, please replace the 1st line with
+ * // namespace=
+ * To use custom namespace, please replace the 1st line with
+ * // namespace = MyCustomNameSpace.Example
+ * where MyCustomNameSpace.Example is your own custom namespace.
+ * Note: This must be in you 1st line otherwise it will not be valid,
+ * and must start with // comment, /* */ comment doesn't work.
+ */
+ 
+// 'using some.namespace;' must be placed here above the COMPILER directive.
+using System.Collections;
+using System.Text;
+using LLVMSharp.Compiler.Ast;
+
+COMPILER LLVMSharp
+
+public AstSourceFile RootNode=null;
+
+// Place your custom functions or variables here.
+// The contents will be placed in your parser class
+
+Token Peek(int n)
+{
+    scanner.ResetPeek();
+    Token x = la;
+    while (n > 0)
+    {
+        x = scanner.Peek();
+        n--;
+    }
+    return x;
+}
+
+const int maxTerminals=160;//set size
+static BitArray NewSet(params int[] values)
+{
+    BitArray a=new BitArray(maxTerminals);
+    foreach(int x in values)
+        a[x]=true;
+    return a;
+}
+
+static BitArray
+    unaryHead   = NewSet(_plus,_minus,_not,_times,_increment,_decrement),
+	typeKW       = NewSet(_char, _bool, _object, _string, _int, _float),
+	castFollower = NewSet(_not, _leftpar, _ident,
+	               /* literals */
+	               _integerConstant, _realConstant, _characterConstant, _stringConstant,
+	               /* any keyword expect as and is */
+	               _base, _bool, _break, _case,
+				   _char, _class, _const, _continue, 
+				   _do, _else, _enum, _explicit,
+				   _extern, _false, _float, _for,
+				   _if, _implicit, _int,
+				   _namespace, _new, _null, _object, _operator,
+				   _override, _private, _protected, _public,
+				   _return, _sealed, _sizeof,
+				   _static, _string, _struct, _this,
+				   _true, _typeof,
+                   _usingKW, _virtual, _void, _while
+	               );
+
+bool IsFunction()
+{
+  return Peek(1).kind==_leftpar;
+}
+
+bool IsField()
+{
+   int peek = Peek(1).kind;
+	return la.kind == _ident && 
+	       (peek == _comma || peek == _assignment || peek == _semicolon);
+	       /*int x, int x =, int x; */
+}
+
+bool IsGetAccessor()
+{
+    return la.val == "get" ;
+}
+bool IsDimensions(ref Token pt){
+	while(true){
+		if(pt.kind==_leftbrack){
+			do pt=scanner.Peek();
+			while(pt.kind==_comma);
+			if(pt.kind!=_rightbrack) return false;
+		}else if(pt.kind!=_times) break;
+		pt=scanner.Peek();
+	}
+	return true;
+}
+
+public bool IsDims(){
+	int peek=Peek(1).kind;
+	return la.kind == _leftbrack && peek == _rightbrack;
+}
+
+bool IsLocalVarDecl()
+{
+    string ignore;
+	Token pt=la;
+	scanner.ResetPeek();
+	if(la.kind==_char || la.kind==_bool || la.kind==_object || la.kind==_string || la.kind==_int || la.kind==_float){
+		pt=scanner.Peek();
+	}else if(la.kind==_ident && !IsQualident(ref pt,out ignore)){
+		return false;
+	}
+    return IsDimensions(ref pt) && pt.kind==_ident ;
+}
+
+bool IsQualident (ref Token pt, out string qualident) {
+	qualident = "";
+	if (pt.kind == _ident) {
+		qualident = pt.val;
+		pt = scanner.Peek();
+		while (pt.kind == _dot) {
+			pt = scanner.Peek();
+			if (pt.kind != _ident) return false;
+			qualident += "." + pt.val;
+			pt = scanner.Peek();
+		}
+		return true;
+	} else return false;
+}
+
+bool IsTypeCast()
+{
+    if(la.kind != _leftpar)
+        return false;
+   	if (IsSimpleTypeCast()) return true;
+	return GuessTypeCast();
+}
+
+// "(" typeKW ")"
+bool IsSimpleTypeCast () {
+	scanner.ResetPeek();
+	Token pt1 = scanner.Peek();
+	Token pt = scanner.Peek();
+	return typeKW[pt1.kind] && pt.kind == _rightpar;
+}
+
+// "(" Type ")" castFollower
+bool GuessTypeCast () {
+	string id;
+	scanner.ResetPeek();
+	Token pt = scanner.Peek();
+	if (typeKW[pt.kind]) {
+		pt = scanner.Peek();
+	} else if (pt.kind==_void) {
+		pt = scanner.Peek();
+		if (pt.kind != _times) {
+			return false;
+		}
+		pt = scanner.Peek();
+	} else if(IsQualident(ref pt, out id)) {
+		// nothing to do
+	} else {
+		return false;
+	}
+	if (IsDimensions(ref pt) && pt.kind==_rightpar)
+	{
+		pt = scanner.Peek(); // check successor
+		return castFollower[pt.kind];
+	} else {
+		return false;
+	}
+}
+
+
+CHARACTERS
+//Place your characters here.
+
+    tab     = '\t'.
+    cr      = '\r'.
+    eol     = '\n'.
+    newLine = cr + eol.
+
+    letter   = 'A' .. 'Z' + 'a' .. 'z' + '_'.
+    digit    = '0'..'9'.  
+    hexDigit = digit + 'A'..'F' + 'a'..'f'.
+    nonDigit = ANY- digit.
+
+    char               = ANY - "'" - '\\' - newLine.
+    verbatimStringChar = ANY - '"'.
+    regularStringChar  = ANY - '"' - '\\' - newLine.
+    notNewLine         = ANY - newLine .
+     
+TOKENS
+//Place your tokens here.
+
+    ident = ['@'] letter { letter | digit }.
+    integerConstant = digit {digit}.
+    realConstant = ("." digit {digit}) | (digit {digit} ("." digit {digit})).
+    characterConstant =
+		"'" (	char
+				| "\\\'" | "\\\"" | "\\\\" | "\\0" | "\\a" | "\\b" | "\\f" | "\\n" | "\\r" | "\\t" | "\\v"
+			) 
+		"'".
+	stringConstant =
+		("\""	{ regularStringChar
+					| "\\\'" | "\\\"" | "\\\\" | "\\0" | "\\a" | "\\b" | "\\f" | "\\n" | "\\r" | "\\t" | "\\v"
+				}
+		"\""
+	    | "@\"" {verbatimStringChar | "\"\""} "\"").
+
+
+    /*----- keyword names needed in LL(1) resolvers -----*/
+	base       = "base".
+	bool       = "bool".
+	break      = "break".
+	case       = "case".
+	char       = "char".
+	class      = "class".
+	const      = "const".
+	continue   = "continue".
+	do         = "do".
+	else       = "else".
+	enum       = "enum".
+	explicit   = "explicit".
+	extern     = "extern".
+	false      = "false".
+	float      = "float".
+	for        = "for".
+	if         = "if".
+	implicit   = "implicit".
+	int        = "int".
+	internal   = "internal".
+	namespace  = "namespace".
+	new        = "new".
+	null       = "null".
+	object     = "object".
+	operator   = "operator".
+	override   = "override".
+	private    = "private".
+	protected  = "protected".
+	public     = "public".
+	return     = "return".
+	sealed     = "sealed".
+	sizeof     = "sizeof".
+	static     = "static".
+	string     = "string".
+	struct     = "struct".
+	this       = "this".
+	true       = "true".
+	typeof     = "typeof".
+	usingKW    = "using".
+	virtual    = "virtual".
+	void       = "void".
+	while      = "while".
+	
+	/*----- operators and special characters needed in LL(1) resolvers -----*/
+	
+	and                 = "&".
+	assignment          = "=".
+	colon               = ":".
+	comma               = ",".
+	decrement           = "--".
+	divide              = "/".
+	dot                 = ".".
+	conditionalequality = "==".
+	greater             = ">".
+	greaterorequals     = ">=".
+	increment           = "++".
+	leftbrace           = "{".
+	leftbrack           = "[".
+	leftpar             = "(".
+	lessthan            = "<".
+	lessoreqals         = "<=".
+	minus               = "-".
+	notequals           = "!=".
+	not                 = "!".
+	plus                = "+".
+	rightbrace          = "}".
+	rightbrack          = "]".
+	rightpar            = ")".
+	semicolon           = ";".
+	times               = "*".	
+
+
+COMMENTS FROM "/*" TO "*/" NESTED
+COMMENTS FROM "//" TO cr
+
+IGNORE cr + tab + eol
+
+PRODUCTIONS
+
+// Place your EBNF productions here
+
+LLVMSharp
+= 											(. RootNode=new AstSourceFile(this);	
+											   RootNode.AstUsingDeclarativeCollection=new AstUsingDeclarativeCollection();
+											.)
+	{										(. AstUsingDeclarative astUsingDeclarative=null;.)
+		UsingDeclaritive<out astUsingDeclarative> (. RootNode.AstUsingDeclarativeCollection.Add(astUsingDeclarative); .)
+	} 
+	{                                               (.IAstNamespaceMember astNamespaceMember=null;.)
+	    NamespaceMember<out astNamespaceMember>     (. 
+	                                                   if(astNamespaceMember is AstNamespaceBlock)
+	                                                        RootNode.AstNamespaceBlockCollection.Add(astNamespaceMember);
+	                                                    else if(astNamespaceMember is AstType)
+	                                                        RootNode.AstTypeCollection.Add(astNamespaceMember);
+	                                                .)
+	}
+.
+
+UsingDeclaritive<out AstUsingDeclarative astUsingDeclarative>
+=											(. astUsingDeclarative=new AstUsingDeclarative(this); .)
+	"using" Qualident<out astUsingDeclarative.Namespace> ";"
+.
+
+NamespaceMember<out IAstNamespaceMember astNamespaceMember>    /* using declarative inside ns not supported. */
+(. astNamespaceMember=null; .)
+=                  
+    (                                       (. AstNamespaceBlock astNamespaceBlock=new AstNamespaceBlock(this); .)
+        "namespace" Qualident<out astNamespaceBlock.Namespace> 
+        "{"									(. IAstNamespaceMember astNamespaceMember2=null;  .)
+            {
+				NamespaceMember<out astNamespaceMember2> (.
+														 	if(astNamespaceMember2 is AstNamespaceBlock)
+														 		astNamespaceBlock.AstNamespaceBlockCollection.Add(astNamespaceMember2);
+															else if(astNamespaceMember2 is AstType)
+																astNamespaceBlock.AstTypeCollection.Add(astNamespaceMember2);
+														 .)
+			} 
+        "}"
+            [";"]                           (.  astNamespaceMember=astNamespaceBlock;.)
+        | 									(.  int l=la.line,c=la.col; 
+                                                AstTypeModifierCollection astTypeModifierCollection=new AstTypeModifierCollection();
+                                            .)
+			{                               (.  AstTypeModifier astTypeModifier=null; .)
+			    TypeModifiers<out astTypeModifier>  (. astTypeModifierCollection.Add(astTypeModifier); .)
+			} 								(. AstType astType=null; .)
+			TypeDecl<out astType>
+											(. if(astType==null && la.val=="extern"){ /* bug fix when put extern enum */
+												errors.errorList.Add(new ErrorInfo(ErrorType.SyntaxError,
+													"The modifer 'extern' is not valid for this item.",
+													la.line,la.col,scanner.FileName));
+											   }else{
+											   	if(astType!=null){
+													astType.LineNumber =l;
+												    astType.ColumnNumber =c; 
+												    astType.AstTypeModifierCollection=astTypeModifierCollection;
+													astNamespaceMember=astType;
+												}
+											   }
+											.)
+    )
+. 
+                   
+Qualident<out string qualident>
+=											(. StringBuilder sb=new StringBuilder(); .)
+	ident 									(. sb.Append(t.val); .)
+	{
+		"." ident							(. sb.Append(".");sb.Append(t.val); .)
+	}
+											(. qualident=sb.ToString(); .)
+.
+
+TypeModifiers<out AstTypeModifier astTypeModifier>
+=                                           (. astTypeModifier=null; .)
+    (
+          "public"                          (. astTypeModifier=new AstPublicTypeModifier(this,false); .)
+        | "protected"                       (. astTypeModifier=new AstProtectedTypeModifier(this,false); .)
+        | "private"                         (. astTypeModifier=new AstPrivateTypeModifier(this,false); .) 
+        | "sealed"                          (. astTypeModifier=new AstSealedTypeModifier(this,false); .)
+    )
+.
+
+TypeDecl<out AstType astType>
+=                                               	(. astType=null; .)
+    ( 
+        (
+	                                        		(. AstClass astClass=new AstClass(this); .)
+	            "class" ident                       (. astClass.Name=t.val; .)
+	            [
+	                ClassBase<out astClass.AstParentClass>
+	            ]
+	            ClassBody<ref astClass> [";"]       (. astType=astClass; .)
+	        |                                       (. AstStruct astStruct=new AstStruct(this); .)       
+	            "struct" ident                      (. astStruct.Name=t.val; .)
+	            StructBody<ref astStruct> [";"]		(. astType=astStruct; .)
+		)
+        |                                       	(. AstEnum astEnum=new AstEnum(this); .)       
+            "enum" ident                        	(. astEnum.Name=t.val; .)
+            [
+                ":" "int"                       	(. astEnum.AstEnumType=new AstEnumType(this,false); 
+                                                   	   astEnum.AstEnumType.Name="int";
+                                                	.)
+            ]
+            EnumBody<out astEnum.AstEnumMemberCollection>
+            [";"] /*only int supported */       	(. astType=astEnum; .)
+    )
+.
+
+ClassBase<out AstParentClass astParentClass>
+(. astParentClass=null; string parentClass=""; .)
+=
+    ":" ClassType<out parentClass>              (.  astParentClass=new AstParentClass(this,false);
+                                                    astParentClass.Name=parentClass;
+                                                .)
+.
+
+ClassType<out string classType>
+(. classType="";.)
+= 
+    (
+        Qualident<out classType> 
+        |
+        (
+              "object"                              
+            | "string"
+        )                                       (. classType=t.val; .)
+    )
+.
+
+ClassBody<ref AstClass astClass>
+(. IObjectMember objectMember=null; .)
+=
+	"{" 
+		{										(. AstMemberModifierCollection astMemberModifierCollection=new AstMemberModifierCollection(); .)
+			{									(. AstMemberModifier astMemberModifier=null;  .)
+				MemberModifier<out astMemberModifier>	(. astMemberModifierCollection.Add(astMemberModifier);  .)
+			}
+			ClassMember<out objectMember>		(. if(objectMember!=null){
+														objectMember.AstMemberModifierCollection=astMemberModifierCollection; 
+														if(objectMember is AstType)
+															astClass.AstTypeCollection.Add(objectMember);
+														else if(objectMember is AstConstructor)
+															astClass.AstConstructorCollection.Add(objectMember);
+														else if(objectMember is AstMethod)
+															astClass.AstMethodCollection.Add(objectMember);
+														else if(objectMember is AstAccessor)
+															astClass.AstAccessorCollection.Add(objectMember);
+														else if(objectMember is AstTypeConverter)
+															astClass.AstTypeConverterCollection.Add(objectMember);
+														else if(objectMember is AstOperatorOverload)
+															astClass.AstOperatorOverloadCollection.Add(objectMember);
+
+														// if there were membermodifiers, then then update the line and col
+														// to the first MemberModifier
+														if((objectMember is AstFieldCollection)){ // coz AstFieldCollection is not a AstNode.
+															AstFieldCollection fields=(AstFieldCollection)objectMember;
+															foreach(AstField field in fields){ // start copying the membermodifers to all the fields and also copy to AstType
+																field.AstMemberModifierCollection=astMemberModifierCollection;
+																astClass.AstFieldCollection.Add(field);
+															}
+														}else{
+															AstNode astNode=(AstNode)objectMember;
+															if(objectMember.AstMemberModifierCollection.Count>0){
+																AstMemberModifier temp=(AstMemberModifier)objectMember.AstMemberModifierCollection[0];
+												                astNode.LineNumber = temp.LineNumber;
+												                astNode.ColumnNumber = temp.ColumnNumber;
+															}
+														}
+													}
+												.)
+		}
+	"}"
+.
+
+MemberModifier<out AstMemberModifier astMemberModifier>
+(. astMemberModifier=null; .)
+=	 
+	( 
+		  "override" 					(. astMemberModifier=new AstOverrideMemberModifier(this,false); .)
+		| "public" 						(. astMemberModifier=new AstPublicMemberModifier(this,false); .)
+		| "private" 					(. astMemberModifier=new AstPrivateMemberModifier(this,false); .)
+		| "protected"					(. astMemberModifier=new AstProtectedMemberModifier(this,false); .)
+		| "sealed" 						(. astMemberModifier=new AstSealedMemberModifier(this,false); .)
+		| "static" 						(. astMemberModifier=new AstStaticMemberModifier(this,false); .)
+		| "extern" 						(. astMemberModifier=new AstExternMemberModifier(this,false); .)
+		| "virtual"						(. astMemberModifier=new AstVirtualMemberModifier(this,false); .)
+	)
+.
+
+ClassMember<out IObjectMember objectMember>
+(. objectMember=null; .)
+=
+	StructMember<out objectMember>
+.
+
+StructBody<ref AstStruct astStruct>
+(. IObjectMember objectMember=null;  .)
+= 
+	"{" 
+		{										(. AstMemberModifierCollection astMemberModifierCollection=new AstMemberModifierCollection(); .)
+			{									(. AstMemberModifier astMemberModifier=null;  .)
+				MemberModifier<out astMemberModifier>	(. astMemberModifierCollection.Add(astMemberModifier);  .)
+			}
+			StructMember<out objectMember>		(.	if(objectMember!=null){
+														objectMember.AstMemberModifierCollection=astMemberModifierCollection; 
+														if(objectMember is AstType)
+															astStruct.AstTypeCollection.Add(objectMember);
+														else if(objectMember is AstConstructor)
+															astStruct.AstConstructorCollection.Add(objectMember);
+														else if(objectMember is AstMethod)
+															astStruct.AstMethodCollection.Add(objectMember);
+														else if(objectMember is AstAccessor)
+															astStruct.AstAccessorCollection.Add(objectMember);
+														else if(objectMember is AstTypeConverter)
+															astStruct.AstTypeConverterCollection.Add(objectMember);
+														else if(objectMember is AstOperatorOverload)
+															astStruct.AstOperatorOverloadCollection.Add(objectMember);
+
+														// if there were membermodifiers, then then update the line and col
+														// to the first MemberModifier
+														if(objectMember is AstFieldCollection){ // coz AstFieldCollection is not a AstNode.
+															AstFieldCollection fields=(AstFieldCollection)objectMember;
+															foreach(AstField field in fields){ // start copying the membermodifers to all the fields and also copy to AstType
+																field.AstMemberModifierCollection=astMemberModifierCollection;
+																astStruct.AstFieldCollection.Add(field);
+															}
+														}else{
+															AstNode astNode=(AstNode)objectMember;
+															if(objectMember.AstMemberModifierCollection.Count>0){
+																AstMemberModifier temp=(AstMemberModifier)objectMember.AstMemberModifierCollection[0];
+												                astNode.LineNumber = temp.LineNumber;
+												                astNode.ColumnNumber = temp.ColumnNumber;
+															}
+														}
+													}
+												.)
+		} 
+	"}"
+.
+
+StructMember<out IObjectMember objectMember>
+(. objectMember=null; .)
+= 
+	(	 /* const decl */									(. AstField astField=new AstField(this); AstFieldCollection astFieldCollection=new AstFieldCollection(); .)
+	     "const"											(. astField.IsConstant=true; string type=""; .)
+		 Type<out type,out astField.IsArray>				(. astField.Type=type; .)
+		 ident												(. astField.Name=t.val; 
+															   astField.LineNumber=t.line;
+															   astField.ColumnNumber=t.col;
+															.)
+		 "="												(. IAstExpression astExpression=null; .)
+		 Expr<out astExpression>							(. astField.Initialization=astExpression; astFieldCollection.Add(astField); .)
+		 { 
+			"," 											(. AstField astField2=new AstField(this); astField2.IsConstant=true; .)
+			ident 											(. astField2.Name=t.val; astField2.Type=type; 
+															   astField2.LineNumber=t.line;
+															   astField2.ColumnNumber=t.col;
+															.)
+			"=" 											(. IAstExpression astExpression2=null; .)
+			Expr<out astExpression2> 						(. astField2.Initialization=astExpression2; .)	
+															(. astFieldCollection.Add(astField2); .)
+		 } ";" 												(. objectMember=astFieldCollection; .)
+	   | IF (IsFunction())
+	     // constructors
+		 ident 												(.	AstConstructor astConstructor=new AstConstructor(this,false);
+																astConstructor.Name=t.val;
+															.)
+		 "(" 
+			[
+				FormalParams<ref astConstructor.Parameters>
+			] 
+		 ")" 
+		 [ConstructorCall<out astConstructor.AstConstructorCall>] 
+		 (
+			  Block<out astConstructor.AstBlock> 
+			| ";" (. astConstructor.AstBlock=null;.) 
+		 ) 
+		 													(. objectMember=astConstructor;.)
+	   | /* void methods */									(. AstMethod astMethod=new AstMethod(this); .)
+		 "void" 											(. astMethod.ReturnType="void" ; .)
+		 ident 												(. astMethod.Name=t.val; .)
+		 "(" [FormalParams<ref astMethod.Parameters>] ")"
+		 ( Block<out astMethod.AstBlock> | ";" )			(. objectMember=astMethod; .)
+	   | /* casting */											(. AstTypeConverter astTypeConverter=null; .)
+		 (
+			  "implicit"										(. astTypeConverter=new AstImplicitTypeConverter(this,false); .)
+			| "explicit"										(. astTypeConverter=new AstExplicitTypeConverter(this,false); .)
+		 )
+		 "operator" Type<out astTypeConverter.ReturnType,out astTypeConverter.IsArray> 
+		"(" 													(. astTypeConverter.AstParameter=new AstParameter(this);
+																   astTypeConverter.AstParameter.ParameterType=new AstPassByValueParameterType(this);
+																.)
+			Type<out astTypeConverter.AstParameter.Type,out astTypeConverter.AstParameter.IsArray> ident  (. astTypeConverter.AstParameter.Name=t.val; .)
+		")" 
+		(Block<out astTypeConverter.AstBlock> | ";")			(. objectMember=astTypeConverter; .)
+	   |										(. AstType astType=null; .)
+		 // inner type decl
+		 TypeDecl<out astType>					(. objectMember=astType; .)
+	   | 	 (. string fieldOrMethodType=""; bool isArray; .)
+			Type<out fieldOrMethodType,out isArray>
+			(	
+				  /* operator overloading */	(. AstOperatorOverload astOperatorOverload=new AstOperatorOverload(this); .)	
+				  "operator" OverloadableOp<ref astOperatorOverload.OverloadableOperand> (. astOperatorOverload.ReturnType = fieldOrMethodType; astOperatorOverload.IsArray=isArray; .)
+				  "(" 								(. AstParameter astParameter1=new AstParameter(this); astParameter1.ParameterType=new AstPassByValueParameterType(this); .)	
+						Type<out astParameter1.Type,out astParameter1.IsArray> ident 			(. astParameter1.Name=t.val; astOperatorOverload.AstParameter1=astParameter1; .)
+						[ "," 						(. AstParameter astParameter2=new AstParameter(this); astParameter2.ParameterType=new AstPassByValueParameterType(this); .)
+							Type<out astParameter2.Type,out astParameter2.IsArray> ident 		(. astParameter2.Name=t.val; astOperatorOverload.AstParameter2=astParameter2; .)
+						]
+				  ")" 
+				  (Block<out astOperatorOverload.AstBlock>|";")						(. objectMember=astOperatorOverload; .)
+				| IF (IsField())					(. AstField astField=null; AstFieldCollection astFieldCollection=new AstFieldCollection(); .)
+				  Field<out astField>				(. astField.Type=fieldOrMethodType; astFieldCollection.Add(astField); .)
+				  { 								(. AstField astField2=null; .)
+					"," Field<out astField2>		(. astField2.Type=fieldOrMethodType; astFieldCollection.Add(astField2); .)
+				  } ";"								(. objectMember=astFieldCollection; .)
+				| 
+				  ident								(. string name=t.val; .)			
+				  (								
+													(. AstMethod astMethod=new AstMethod(this,false); .)								
+													(. astMethod.Name=name; astMethod.ReturnType=fieldOrMethodType; .)
+						 /* methods other than void */
+						 "(" [FormalParams<ref astMethod.Parameters>] ")" 
+						  (Block<out astMethod.AstBlock>|";")								(. objectMember=astMethod; .)
+					  | /* Get-Set Accessors - also known as Properties */
+															(. string accessorName=name; .)
+						  "{"								(. AstAccessor astAccessor=null; .)
+								Accessors<out astAccessor> 	(. astAccessor.Name=accessorName; astAccessor.ReturnType=fieldOrMethodType; .)
+						  "}"								(. objectMember=astAccessor; .)
+				 )
+	     	)
+	)
+.
+
+IntType<out string intType>
+= 
+	("int" | "char")							(. intType=t.val; .)
+.
+
+EnumBody<out AstEnumMemberCollection astEnumMemberCollection>
+(. astEnumMemberCollection=new AstEnumMemberCollection(); .)
+= 
+	"{" 										(. AstEnumMember astEnumMember=null;.)
+		EnumMember<out astEnumMember> 			(. astEnumMemberCollection.Add(astEnumMember); .)
+		{ "," 									(. AstEnumMember astEnumMember2=null;.)
+		  EnumMember<out astEnumMember2>		(. astEnumMemberCollection.Add(astEnumMember2); .)
+		} 
+	"}"
+.
+ 
+EnumMember<out AstEnumMember astEnumMember>
+= 
+	ident	(.  astEnumMember=new AstEnumMember(this,false);
+				astEnumMember.Name=t.val; .)
+.
+
+Type<out string type,out bool isArray>
+(. type=""; isArray=false; .)
+=
+	 ( SimpleType<out type> 
+	 | ClassType<out type>
+	 )
+	 ( IF(IsDims())
+	   [ 
+	   	"[" 			(. isArray=true; .)
+		"]" 
+	   ] 
+	   | )
+.
+
+SimpleType<out string simpleType>
+(. simpleType=""; .)
+= 
+	(	IntType<out simpleType>
+		| ("bool" | "float")				(. simpleType=t.val; .)
+	)
+.
+
+ConstructorCall<out AstConstructorCall astConstructorCall>
+(. astConstructorCall=null; .)
+=
+	":" 
+	(
+		  "base"							(. astConstructorCall=new AstBaseConstructorCall(this); .)
+		| "this"							(. astConstructorCall=new AstThisConstructorCall(this); .)
+	) 
+	"(" 
+		[ 									(. AstArgument astArgument1=null; .)
+			Argument<out astArgument1>		(. astConstructorCall.AstArgumentCollection.Add(astArgument1); .)
+			{ 	"," 						(. AstArgument astArgument2=null; .)
+				Argument<out astArgument2>	(. astConstructorCall.AstArgumentCollection.Add(astArgument2); .)
+			} 
+		]
+	")"
+.
+
+Block<out AstBlock astBlock>
+(. astBlock=new AstBlock(this); .)
+= "{" {Statement<ref astBlock.AstStatementCollection>} "}".
+
+Statement<ref AstStatementCollection astStatementCollection>
+= 
+    (											(. AstLocalVariableDeclaration astLocalVariableDeclaration=new AstLocalVariableDeclaration(this); .)
+          "const"								(. astLocalVariableDeclaration.IsConstant=true; string type=""; bool isArray; .)
+		  Type<out type,out isArray>			(. astLocalVariableDeclaration.Type=type;astLocalVariableDeclaration.IsArray=isArray; .)
+		  ident									(. astLocalVariableDeclaration.Name=t.val; astLocalVariableDeclaration.LineNumber=t.line; astLocalVariableDeclaration.ColumnNumber=t.col;  .)
+		  "=" 									(. astStatementCollection.Add(astLocalVariableDeclaration); .)
+		  Expr<out astLocalVariableDeclaration.Initialization>
+		  {		","								(. AstLocalVariableDeclaration astLocalVariableDeclaration2=new AstLocalVariableDeclaration(this); .)
+		  		ident 							(. astLocalVariableDeclaration2.Name=t.val; astLocalVariableDeclaration2.Type=type; .)
+				"=" Expr<out astLocalVariableDeclaration2.Initialization> (. astStatementCollection.Add(astLocalVariableDeclaration2); .)
+		  }	
+        | IF(IsLocalVarDecl())
+          LocalVarDecl<ref astStatementCollection> ";"
+        | (. AstStatement astStatement=null; .)
+		  EmbeddedStatement<out astStatement> (. astStatementCollection.Add(astStatement); .)
+    )
+.
+
+LocalVarDecl<ref AstStatementCollection astStatementCollection>
+(. string type="";bool isArray; .)
+=
+	Type<out type,out isArray>							(. AstLocalVariableDeclaration astLocalVariableDeclaration=null; .)
+	LocalVar<out astLocalVariableDeclaration>  			(. astLocalVariableDeclaration.Type=type; astLocalVariableDeclaration.IsArray=isArray; astStatementCollection.Add(astLocalVariableDeclaration); .)
+	{													(. AstLocalVariableDeclaration astLocalVariableDeclaration2=null; .)
+		"," LocalVar<out astLocalVariableDeclaration2> 	(. astLocalVariableDeclaration2.Type=type;astLocalVariableDeclaration2.IsArray=isArray; astStatementCollection.Add(astLocalVariableDeclaration2);  .)
+	}
+.
+
+LocalVar<out AstLocalVariableDeclaration astLocalVariableDeclaration>
+=											(. astLocalVariableDeclaration=new AstLocalVariableDeclaration(this); .)
+	ident									(. astLocalVariableDeclaration.Name=t.val; .)
+	[ "=" Init<out astLocalVariableDeclaration.Initialization> ]
+.
+
+EmbeddedStatement<out AstStatement astStatement>
+(. astStatement=null; .)
+=   
+	(											(. AstBlock astBlock=null; .)
+		  Block<out astBlock>					(. astStatement=astBlock; .)
+	    | ";" // astStatement is already null, so don't do anythin out here.
+	    | 										(. IAstExpression astExpression=null; .)
+		  StatementExpr<out astExpression> ";"	(. astStatement=(AstStatement)astExpression; .)
+	    | 										(. AstIfCondition astIfCondition=new AstIfCondition(this); .)
+		  "if" "(" Expr<out astIfCondition.Condition> ")" 
+		  EmbeddedStatement<out astIfCondition.AstStatement>
+		  ["else" EmbeddedStatement<out astIfCondition.AstStatementElse>]
+		  										(. astStatement=astIfCondition; .)
+	    | 										(. AstWhileLoop astWhileLoop=new AstWhileLoop(this); .)
+		  "while" "(" Expr<out astWhileLoop.Condition> ")" 
+		  EmbeddedStatement<out astWhileLoop.AstStatement>
+		  										(. astStatement=astWhileLoop; .)
+	    | 										(. AstDoLoop astDoLoop=new AstDoLoop(this); .)
+		  "do" 
+		  EmbeddedStatement<out astDoLoop.AstStatement>
+		  "while" "(" Expr<out astDoLoop.Condition> ")" ";"				(. astStatement=astDoLoop; .)
+	    | 										(. AstForLoop astForLoop=new AstForLoop(this); .)
+		  "for" "(" 
+			[ForInit<ref astForLoop.Initializers>] ";"
+			[Expr<out astForLoop.Condition>] ";" 
+			[ForInc<ref astForLoop.IncrementExpressions> ] 
+			")" EmbeddedStatement<out astForLoop.Body>	(. astStatement=astForLoop; .)
+	    | 										(. AstBreak astBreak=new AstBreak(this); .)
+		  "break" ";"							(. astStatement=astBreak; .)
+	    | 										(. AstContinue astContinue=new AstContinue(this); .)
+		  "continue" ";"						(. astStatement=astContinue; .)
+	    | 										(. AstReturn astReturn=new AstReturn(this); .)
+		  "return" [Expr<out astReturn.AstExpression>] ";" (. astStatement=astReturn; .)
+	)
+.
+
+ForInit<ref AstStatementCollection astStatementCollection>
+= 
+    ( 
+		  IF(IsLocalVarDecl())
+      	  LocalVarDecl<ref astStatementCollection> 
+    	| 												(. IAstExpression astExpression=null; .)
+			StatementExpr<out astExpression> 			(. astStatementCollection.Add(astExpression);  .)
+			{ 											(. IAstExpression astExpression2=null; .)
+				"," StatementExpr<out astExpression2>	(. astStatementCollection.Add(astExpression2); .)
+			}
+	)
+.
+
+ForInc<ref AstExpressionCollection astExpressionCollection>
+=														(. IAstExpression astExpression=null; .)
+	StatementExpr<out astExpression> 					(. astExpressionCollection.Add(astExpression); .)
+	{													(. IAstExpression astExpression2=null; .)
+		"," StatementExpr<out astExpression2> 			(. astExpressionCollection.Add(astExpression2); .)
+	}
+.
+
+StatementExpr<out IAstExpression astExpression>
+(. astExpression=null; AstAssignmentExpression astAssignmentExpression=null;
+   IAstExpression lvalue=null,rvalue=null; .)
+=								
+	Unary<out lvalue> 
+	(
+		  AssignOp<out astAssignmentExpression>	(. AstAssignmentStatement astAssignmentStatement=new AstAssignmentStatement(this); .)
+		  Expr<out rvalue>
+	
+												(. 	astAssignmentExpression.LValue=lvalue;
+													astAssignmentExpression.RValue=rvalue;
+													astAssignmentStatement.AstAssignmentExpression=astAssignmentExpression; 
+													astExpression=astAssignmentStatement; .)
+		|										(. astExpression=lvalue; .)
+	)
+.
+
+AssignOp<out AstAssignmentExpression astAssignmentExpression>
+(. astAssignmentExpression=null; .)
+=
+	(
+		  "=" 							   (. astAssignmentExpression=new AstSimpleAssignmentExpression(this,false); .)
+		| "+=" 							   (. astAssignmentExpression=new AstAddAssignmentExpression(this,false); .)
+		| "-=" 							   (. astAssignmentExpression=new AstSubtractAssignmentExpression(this,false); .)
+		| "*=" 							   (. astAssignmentExpression=new AstMultiplyAssignmentExpression(this,false); .)
+		| "/="							   (. astAssignmentExpression=new AstDivisionAssignmentExpression(this,false); .)
+	)
+.
+
+Expr<out IAstExpression astExpression>
+(. astExpression=null; IAstExpression astExpression2=null; AstAssignmentExpression astAssignmentExpression=null;.)
+=
+	Unary<out astExpression> 
+	(   /*if unary expr, the astExpression2 is null */
+		OrExpr<ref astExpression>
+		| AssignOp<out astAssignmentExpression> Expr<out astExpression2>
+										(.	if(astAssignmentExpression!=null){
+												astAssignmentExpression.LValue=astExpression;
+												astAssignmentExpression.RValue=astExpression2;
+												astExpression=astAssignmentExpression;
+												return;
+											}
+										.)
+	)
+										/* if unary expression no need to change the out astExpression for Expr<> */
+										(. 		
+												if(astExpression2!=null && astExpression2 is AstBinaryExpression){
+													AstBinaryExpression astBinaryExpression=(AstBinaryExpression)astExpression2;
+													astBinaryExpression.LeftOperand=astExpression;
+													astExpression=astBinaryExpression;
+											   }
+										.)
+.
+
+OrExpr<ref IAstExpression astExpression>
+=
+	AndExpr<ref astExpression> 
+	{													(. AstBinaryExpression astBinaryExpression=null; .)
+		"||"											(. astBinaryExpression=new AstOrExpression(this,false); .)
+		Unary<out astBinaryExpression.RightOperand> 	(. astBinaryExpression.LeftOperand=astExpression; .)
+		AndExpr<ref astBinaryExpression.RightOperand> 	(. astExpression=astBinaryExpression; .)
+	}
+.
+
+AndExpr<ref IAstExpression astExpression>
+=
+	EqlExpr<ref astExpression> 
+	{													(. AstBinaryExpression astBinaryExpression=null; .)
+		"&&"											(. astBinaryExpression=new AstAndExpression(this,false); .)
+		Unary<out astBinaryExpression.RightOperand> 	(. astBinaryExpression.LeftOperand=astExpression; .)
+		EqlExpr<ref astBinaryExpression.RightOperand> 	(. astExpression=astBinaryExpression; .)
+	}
+.
+
+EqlExpr<ref IAstExpression astExpression>
+=
+	RelExpr<ref astExpression> 
+	{													(. AstBinaryExpression astBinaryExpression=null; .) 
+		(
+			  "!=" 										(. astBinaryExpression=new AstInequalityExpression(this,false); .)
+			| "=="										(. astBinaryExpression=new AstEqualityExpression(this,false); .)
+		)  												(. astBinaryExpression.LeftOperand=astExpression; .)
+		Unary<out astBinaryExpression.RightOperand> 
+		RelExpr<ref astBinaryExpression.RightOperand> 	(. astExpression=astBinaryExpression; .)
+	}													
+.
+
+RelExpr<ref IAstExpression astExpression>
+=
+	AddExpr<ref astExpression>
+	{ 													
+		(											  	(. AstBinaryExpression astBinaryExpression=null; .)
+				(
+					  "<"							  	(. astBinaryExpression=new AstLesserThanExpression(this,false); .)
+					| ">"							  	(. astBinaryExpression=new AstGreaterThanExpression(this,false); .)
+					| "<="							  	(. astBinaryExpression=new AstLesserThanOrEqualExpression(this,false); .)
+					| ">="							  	(. astBinaryExpression=new AstGreaterThanOrEqualExpression(this,false); .)
+				)
+				Unary<out astBinaryExpression.RightOperand> 
+				AddExpr<ref astBinaryExpression.RightOperand>
+														(. astBinaryExpression.LeftOperand=astExpression; astExpression=astBinaryExpression; .)
+      		| 											(. IAstExpression astExpression2=null; string type=""; bool isArray; .)	
+				(
+					  "is"								(. astExpression2=new AstIsExpression(this,false); .)
+					| "as"								(. astExpression2=new AstAsExpression(this,false); .)
+				)
+				Type<out type,out isArray>				(. if(astExpression2 is AstIsExpression){
+														   		AstIsExpression temp=(AstIsExpression)astExpression2;
+																temp.AstExpression=astExpression;
+																temp.Type=type;
+																temp.IsArray=isArray;
+														   }else{
+														   		AstAsExpression temp=(AstAsExpression)astExpression2;
+																temp.AstExpression=astExpression;
+																temp.Type=type;
+																temp.IsArray=isArray;
+														   }
+														   astExpression=astExpression2;
+														.)
+		)											   	
+	}
+.
+
+AddExpr<ref IAstExpression astExpression>
+=
+	MulExpr<ref astExpression> 
+	{ 													(. AstBinaryExpression astBinaryExpression=null; .)
+		(							
+			  "+"										(. astBinaryExpression=new AstAdditionExpression(this,false);  .)
+			| "-"										(. astBinaryExpression=new AstSubtractionExpression(this,false); .)
+		)												(. astBinaryExpression.LeftOperand=astExpression; .)
+		Unary<out astBinaryExpression.RightOperand>
+		MulExpr<ref astBinaryExpression.RightOperand>
+														(. astExpression=astBinaryExpression; .)
+	}
+.
+
+MulExpr<ref IAstExpression astExpression>
+=
+	{													(. AstBinaryExpression astBinaryExpression=null; .)
+		(
+			  "*"										(. astBinaryExpression=new AstMuliplicationExpression(this,false); .)
+			| "/"										(. astBinaryExpression=new AstDivisionExpression(this,false); .)
+		) 
+		Unary<out astBinaryExpression.RightOperand>	
+														(. astBinaryExpression.LeftOperand=astExpression;
+												  		   astExpression=astBinaryExpression; .)
+	}
+.
+
+Unary<out IAstExpression astExpression>
+(. IAstExpression astExpression1=null,astExpression2=null; string dummy=""; astExpression=null; bool isArray;.)
+=
+    {   IF(unaryHead[la.kind] || IsTypeCast())
+        ( 
+			  "+"									(. AstUnaryPlus astUnaryPlus = new AstUnaryPlus(this);
+													   if(astExpression1==null)
+													   { astUnaryPlus.AstExpression = astExpression1;}
+													   astExpression1=astUnaryPlus;
+													.)
+			| "-"									(. AstUnaryMinus astUnaryMinus = new AstUnaryMinus(this);
+													   if(astExpression1==null)
+													   { astUnaryMinus.AstExpression = astExpression1;}
+													   astExpression1=astUnaryMinus;
+													.)
+			| "!" 									(. 	AstNot astNot=new AstNot(this); 
+														if(astExpression1!=null)
+															astNot.AstExpression=astExpression1;
+														astExpression1=astNot;
+													.)
+			| "++" 									(. 	AstPreIncrement astPreIncrement=new AstPreIncrement(this); 
+														if(astExpression1!=null)
+															astPreIncrement.AstExpression=astExpression1;
+														astExpression1=astPreIncrement;
+													.)
+			| "--" 								   	(. 	AstPreDecrement astPreDecrement=new AstPreDecrement(this); 
+														if(astExpression1!=null)
+															astPreDecrement.AstExpression=astExpression1;
+														astExpression1=astPreDecrement;
+													.)
+          	| 
+				"("									(. AstTypeCast astTypeCast = new AstTypeCast(this); .)	
+					Type<out dummy,out isArray>		(. if(astExpression!=null)
+														{astTypeCast.AstExpression = astExpression1; astTypeCast.IsArray=isArray;}
+														astExpression1=astTypeCast;														
+													.)
+				")"									(.astTypeCast.VarName=la.val;.)
+        ) 
+    }
+    Primary<out astExpression2>						(. 	if(astExpression1!=null){
+															if(astExpression1 is AstPreDecrement){
+																((AstPreDecrement)astExpression1).AstExpression=astExpression2;
+																astExpression=astExpression1;
+															}else if(astExpression1 is AstPreIncrement){
+																((AstPreIncrement)astExpression1).AstExpression=astExpression2;
+																astExpression=astExpression1;
+															}else if(astExpression1 is AstNot){
+																((AstNot)astExpression1).AstExpression=astExpression2;
+																astExpression=astExpression1;
+															}else if(astExpression1 is AstUnaryMinus){
+																((AstUnaryMinus)astExpression1).AstExpression = astExpression2;
+																astExpression = astExpression1;
+															}else if(astExpression1 is AstUnaryPlus){
+																((AstUnaryPlus)astExpression1).AstExpression = astExpression2;
+																astExpression = astExpression1;
+															}else if(astExpression1 is AstTypeCast){
+																((AstTypeCast)astExpression1).AstExpression = astExpression2;
+																astExpression = astExpression1;
+															}
+														}else{
+															astExpression=astExpression2;
+														}
+													.)
+.
+
+Primary<out IAstExpression astExpression>
+(. astExpression=null; .)
+= 
+    (
+          ident 											(. AstVariableReference astVariableReference=new AstVariableReference(this,false); 
+		  													   astVariableReference.VariableName=t.val; astExpression=astVariableReference;
+															.)
+        | Literal<out astExpression>
+        | "(" Expr<out astExpression> ")" 
+        
+        | (. string temp =""; .)
+        ( "bool" | "char" | "float" | "int" | "object" | "string" )(. temp=t.val; .) "." ident				
+														(.
+														if(astExpression == null){
+														AstMemberReference astMemberReference= new AstMemberReference(this);
+														astMemberReference.Type=temp+"."+t.val;
+														astExpression =astMemberReference;
+														} 
+														.)				
+																																						
+        
+        | "this"
+          (. AstVariableReference astVariableReference = new AstVariableReference(this); 
+			 astVariableReference.VariableName = "this"; astExpression =astVariableReference;.)
+        | "base" 
+		   ( 
+				"." ident (. if(astExpression == null){
+							AstVariableReference astVariableReference= new AstVariableReference(this);
+							astVariableReference.VariableName="base"+"."+t.val;
+							astExpression =astVariableReference;
+							} .)
+			|						(.AstVariableReference astVariableReference = new AstVariableReference(this);
+									   astVariableReference.VariableName = "base";.)
+				"[" Expr<out astVariableReference.Indexer> "]" 
+									(. astExpression =astVariableReference; .)
+			) 				
+       
+        | 													(. AstNewType astNewType=new AstNewType(this,false); .)
+		  	"new" Type<out astNewType.Type,out astNewType.IsArray>					
+			  ( 
+				"(" 
+					[ 										(. AstArgument astArgument1=null; .)
+						Argument<out astArgument1> 			(. astNewType.AstArgumentCollection.Add(astArgument1);  .)
+						{ "," 								(. AstArgument astArgument2=null; .)
+						  Argument<out astArgument2>		(. astNewType.AstArgumentCollection.Add(astArgument2);  .)
+						}
+					] 
+				")" 			
+
+				|																(.  AstIndexer astIndexer= new AstIndexer(this); .)											
+					"["															 
+					 Expr<out astIndexer.Expression>							(.   if(astIndexer.Expression is AstIntegerConstant)
+																					{
+																					AstIntegerConstant astConstant = new AstIntegerConstant(this);
+																					astExpression =astConstant;
+																					}
+																				.)																				
+																				
+					 "]"															(. AstArrayInitialization astArrayInitialization=null; astNewType.AstIndexer = astIndexer; .)
+					[ArrayInit<out astArrayInitialization>]							(. astNewType.AstArrayInitialization=astArrayInitialization;
+																					 astNewType.AstArgumentCollection=null; .)
+																					(. astExpression=astNewType; .)
+				| 											(. AstArrayInitialization astArrayInitialization=null; .)
+				 ArrayInit<out astArrayInitialization> 		(. astNewType.AstArrayInitialization=astArrayInitialization;
+															   astNewType.AstArgumentCollection=null; .)
+			 )												(. astExpression=astNewType; .)
+        | 													(. AstTypeOf astTypeOf=new AstTypeOf(this); .)
+		  "typeof" "(" Type<out astTypeOf.Type,out astTypeOf.IsArray> ")"		(. astExpression=astTypeOf; .)
+        | 													(. AstSizeOf astSizeOf=new AstSizeOf(this); .)
+		  "sizeof" "(" Type<out astSizeOf.Type,out astSizeOf.IsArray> ")"			(. astExpression=astSizeOf; .)
+    )
+    {
+          "++" 					(. 	AstPostIncrement astPostIncrement=new AstPostIncrement(this); 
+									astPostIncrement.AstExpression=astExpression;
+									astExpression=astPostIncrement;
+								.)
+		| "--" 					(. 	AstPostDecrement astPostDecrement=new AstPostDecrement(this); 
+									astPostDecrement.AstExpression=astExpression;
+									astExpression=astPostDecrement;
+								.)
+        | "." ident				(. if(astExpression is AstVariableReference){
+										AstVariableReference astVariableReference=(AstVariableReference)astExpression;
+										astVariableReference.VariableName+="."+t.val;
+										astExpression =astVariableReference;										
+									}else if(astExpression is AstConstant){
+										AstLiteralVarReference astLiteralVarReference =new AstLiteralVarReference(this);
+										astLiteralVarReference.AstConstant =(AstConstant)astExpression;
+										astLiteralVarReference.VariableName = t.val;
+										astExpression = astLiteralVarReference;										
+									}else if(astExpression is AstLiteralVarReference){
+										AstLiteralVarReference astLiteralVarReference=(AstLiteralVarReference)astExpression;
+										astLiteralVarReference.VariableName+="."+t.val;
+										astExpression=astLiteralVarReference;
+									}else if(astExpression is AstMemberReference){
+									AstMemberReference astMemberReference=(AstMemberReference)astExpression;
+									astMemberReference.Type+="."+t.val;
+									astExpression =astMemberReference;
+									}
+								
+								.)
+
+        | 
+        "("													(. AstMethodCall astMethodCall=new AstMethodCall(this,false); .)					
+															(. if(astExpression is AstVariableReference)
+																	astMethodCall.Name=((AstVariableReference)astExpression).VariableName; .)
+			[												(. AstArgument astArgument1=null;.) 
+				Argument<out astArgument1> 					(. astMethodCall.ArgumentCollection.Add(astArgument1);.)
+				{	 										(. AstArgument astArgument2=null; .)
+					","	Argument<out astArgument2> 			(. astMethodCall.ArgumentCollection.Add(astArgument2);.)	
+				} 
+			]												 (. astExpression=astMethodCall; .)
+		")"	
+		|                  //array access                 
+		"["								
+																(. AstIndexer astIndexer = new AstIndexer(this);.)
+											
+			Expr<out astIndexer.Expression>						(. astExpression=astIndexer; .)
+		"]"														
+																	 	
+    }
+.
+
+Literal<out IAstExpression astExpression>
+(. astExpression=null; .)
+=
+	( 
+													
+		  integerConstant 							(. AstIntegerConstant astIntegerConstant=new AstIntegerConstant(this,false);
+													   astIntegerConstant.ConstantValue=int.Parse(t.val);  
+													   astExpression=astIntegerConstant; .)	
+		| realConstant 								(. AstRealConstant astRealConstant=new AstRealConstant(this,false);
+													   astRealConstant.ConstantValue=double.Parse(t.val);  
+													   astExpression = astRealConstant; .)
+		| characterConstant 						(. AstCharConstant astCharConstant=new AstCharConstant(this,false);
+													   astCharConstant.ConstantValue=char.Parse(t.val.Replace("'",""));
+													   astExpression=astCharConstant; .)
+		| stringConstant							(. AstStringConstant astStringConstant=new AstStringConstant(this,false);
+													   astStringConstant.ConstantValue=t.val.Substring(1,t.val.Length-2);  
+													   astExpression = astStringConstant; .)
+		| "true" 									(. AstBooleanConstant astBooleanConstant=new AstBooleanConstant(this,false);
+													   astBooleanConstant.ConstantValue=true;  
+													   astExpression = astBooleanConstant; .)
+		| "false"									(. AstBooleanConstant astBooleanConstant=new AstBooleanConstant(this,false);
+													   astBooleanConstant.ConstantValue=false;  
+													   astExpression = astBooleanConstant; .)
+		| "null"									(. AstNull astNull=new AstNull(this,false);
+													   astExpression = astNull; .)
+	)
+.
+
+OverloadableOp<ref OverloadableOperand overloadableOperand>
+=
+	( 
+		  "+" 					(. overloadableOperand=OverloadableOperand.Plus; .)
+		| "-"  					(. overloadableOperand=OverloadableOperand.Minus; .)
+		| "!"  					(. overloadableOperand=OverloadableOperand.Not; .)
+		| "++"  				(. overloadableOperand=OverloadableOperand.Increment; .)
+		| "--"  					(. overloadableOperand=OverloadableOperand.Decrement; .)
+		| "true"  				(. overloadableOperand=OverloadableOperand.True; .)
+		| "false" 				(. overloadableOperand=OverloadableOperand.False; .)
+    	| "*"  					(. overloadableOperand=OverloadableOperand.Multiplication; .)
+		| "/"  					(. overloadableOperand=OverloadableOperand.Division; .)
+		| "=="  				(. overloadableOperand=OverloadableOperand.Equality; .)
+		| "!="   				(. overloadableOperand=OverloadableOperand.NotEqual; .)
+		| ">"  					(. overloadableOperand=OverloadableOperand.GreaterThan; .)
+		| "<"  					(. overloadableOperand=OverloadableOperand.LessThan; .)
+		| ">="  				(. overloadableOperand=OverloadableOperand.GreaterThanEqual; .)
+		| "<=" 					(. overloadableOperand=OverloadableOperand.LessThanEqual; .)
+	)
+.
+    
+Field<out AstField astField>
+(. astField=new AstField(this); .)
+=
+	ident 									(.	astField.Name=t.val; .)
+	[ "=" Init<out astField.Initialization> ]
+.
+
+FormalParams<ref AstParameterCollection parameters> // params[] not supported
+= 	(. AstParameter parameter=null; .)
+	Par<out parameter>  					(. parameters.Add(parameter); .)
+	["," FormalParams<ref parameters>] 
+.
+
+Par<out AstParameter astParameter>
+(.	astParameter=new AstParameter(this); 
+	astParameter.ParameterType=new AstPassByValueParameterType(this);
+.)
+=	 
+	[// out not supported
+		"ref"											(. astParameter.ParameterType=new AstPassByRefParameterType(this,false); .)
+	] 
+	Type<out astParameter.Type,out astParameter.IsArray>
+	ident												(. astParameter.Name=t.val; .)
+.
+
+Accessors<out AstAccessor astAccessor>
+(. astAccessor=new AstAccessor(this);  .)
+=
+    (     IF(IsGetAccessor())
+          GetAccessor<ref astAccessor> [SetAccessor<ref astAccessor>]
+        | SetAccessor<ref astAccessor> [GetAccessor<ref astAccessor>]
+    )
+.
+
+GetAccessor<ref AstAccessor astAccessor>
+=													(. astAccessor.AstGetAccessor=new AstGetAccessor(this); .)
+	ident
+	(Block<out astAccessor.AstGetAccessor.AstBlock> | ";" )
+.
+
+SetAccessor<ref AstAccessor astAccessor>
+=													(. astAccessor.AstSetAccessor=new AstSetAccessor(this); .)
+	ident
+	(Block<out astAccessor.AstSetAccessor.AstBlock> | ";")
+.
+
+Argument<out AstArgument astArgument>
+=													(. astArgument=new AstArgument(this,false); .)
+	Expr<out astArgument.AstExpression>
+.
+
+Init<out IAstExpression astExpression>
+(. astExpression=null; .)
+=
+	(
+		  Expr<out astExpression>
+		| 											(. AstArrayInitialization astArrayInitialization=null; .)
+		  ArrayInit<out astArrayInitialization>		(. astExpression=astArrayInitialization; .)
+	)
+.
+
+// only single dimensional array
+ArrayInit<out AstArrayInitialization astArrayInitialization>
+(. astArrayInitialization=new AstArrayInitialization(this,false); .) 
+=
+	"{" 
+		[											(. IAstExpression astExpression1=null; .)
+			Expr<out astExpression1>				(. astArrayInitialization.AstExpressionCollection.Add(astExpression1); .)
+			{ "," 									(. IAstExpression astExpression2=null; .)
+			  Expr<out astExpression2>				(. astArrayInitialization.AstExpressionCollection.Add(astExpression2); .)
+			}
+		]
+	"}"
+. 
+
+END LLVMSharp.

@@ -1,0 +1,316 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{95612B04-982F-44E7-BB57-F5606C47A158}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>lsc.Tests</RootNamespace>
+    <AssemblyName>lsc.Tests</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\output\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="LumenWorks.Framework.IO">
+      <HintPath>..\..\lib\CsvReader\bin\LumenWorks.Framework.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="xunit">
+      <HintPath>..\..\lib\xunit-1.5\xunit.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.extensions">
+      <HintPath>..\..\lib\xunit-1.5\xunit.extensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\cgen\1.data" />
+    <None Include="data\cgen\30.data" />
+    <None Include="data\cgen\31.data" />
+    <None Include="data\cgen\32.data" />
+    <None Include="data\cgen\4.data" />
+    <None Include="data\cgen\5.data" />
+    <None Include="data\cgen\6.data" />
+    <None Include="data\cgen\7.data" />
+    <None Include="data\cgen\8.data" />
+    <None Include="data\cgen\9.data" />
+    <None Include="data\cgen\10.data" />
+    <None Include="data\cgen\11.data" />
+    <None Include="data\cgen\12.data" />
+    <None Include="data\cgen\13.data" />
+    <None Include="data\cgen\14.data" />
+    <None Include="data\cgen\15.data" />
+    <None Include="data\cgen\16.data" />
+    <None Include="data\cgen\17.data" />
+    <None Include="data\cgen\18.data" />
+    <None Include="data\cgen\19.data" />
+    <None Include="data\cgen\20.data" />
+    <None Include="data\cgen\21.data" />
+    <None Include="data\cgen\22.data" />
+    <None Include="data\cgen\23.data" />
+    <None Include="data\cgen\24.data" />
+    <None Include="data\cgen\25.data" />
+    <None Include="data\cgen\26.data" />
+    <None Include="data\cgen\27.data" />
+    <None Include="data\cgen\28.data" />
+    <None Include="data\cgen\29.data" />
+    <None Include="data\cgen\33.data" />
+    <None Include="data\cgen\34.data" />
+    <None Include="data\cgen\35.data" />
+    <None Include="data\cgen\36.data" />
+    <None Include="data\cgen\37.data" />
+    <None Include="data\cgen\38.data" />
+    <None Include="data\cgen\39.data" />
+    <None Include="data\cgen\40.data" />
+    <None Include="data\cgen\41.data" />
+    <None Include="data\cgen\42.data" />
+    <None Include="data\cgen\43.data" />
+    <None Include="data\cgen\44.data" />
+    <None Include="data\cgen\45.data" />
+    <None Include="data\cgen\_data.csv" />
+    <None Include="data\semantic\objectheirarchy\bad\5.1.cs" />
+    <None Include="data\semantic\objectheirarchy\bad\5.cs" />
+    <None Include="data\semantic\objectheirarchy\bad\7\7.cs" />
+    <None Include="data\cgen\1.cs" />
+    <None Include="data\cgen\2.cs" />
+    <Compile Include="cgen\CodegenTests.cs" />
+    <Compile Include="cgen\lsc.cs" />
+    <None Include="data\cgen\3.cs" />
+    <None Include="data\cgen\2.data" />
+    <None Include="data\cgen\4.cs" />
+    <None Include="data\cgen\5.cs" />
+    <None Include="data\cgen\6.cs" />
+    <None Include="data\cgen\7.cs" />
+    <None Include="data\cgen\8.cs" />
+    <None Include="data\cgen\9.cs" />
+    <None Include="data\semantic\symbolTable\bad\2\2.cs" />
+    <None Include="data\cgen\10.cs" />
+    <None Include="data\cgen\11.cs" />
+    <None Include="data\cgen\12.cs" />
+    <None Include="data\cgen\13.cs" />
+    <None Include="data\cgen\14.cs" />
+    <None Include="data\cgen\15.cs" />
+    <None Include="data\cgen\16.cs" />
+    <None Include="data\cgen\17.cs" />
+    <None Include="data\cgen\18.cs" />
+    <None Include="data\cgen\19.cs" />
+    <None Include="data\cgen\20.cs" />
+    <None Include="data\cgen\21.cs" />
+    <None Include="data\cgen\22.cs" />
+    <None Include="data\cgen\23.cs" />
+    <None Include="data\cgen\24.cs" />
+    <None Include="data\cgen\25.cs" />
+    <None Include="data\cgen\26.cs" />
+    <None Include="data\cgen\27.cs" />
+    <None Include="data\cgen\28.cs" />
+    <None Include="data\cgen\29.cs" />
+    <None Include="data\cgen\30.cs" />
+    <None Include="data\cgen\31.cs" />
+    <None Include="data\cgen\32.cs" />
+    <None Include="data\cgen\33.cs" />
+    <None Include="data\cgen\34.cs" />
+    <None Include="data\cgen\35.cs" />
+    <None Include="data\cgen\36.cs" />
+    <None Include="data\cgen\37.cs" />
+    <None Include="data\cgen\38.cs" />
+    <None Include="data\cgen\39.cs" />
+    <None Include="data\cgen\40.cs" />
+    <None Include="data\cgen\41.cs" />
+    <None Include="data\cgen\42.cs" />
+    <None Include="data\semantic\symbolTable\bad\3\3.cs" />
+    <None Include="data\semantic\symbolTable\bad\4\4.cs" />
+    <None Include="data\cgen\43.cs" />
+    <None Include="data\cgen\44.cs" />
+    <None Include="data\semantic\Sample\1.cs" />
+    <None Include="data\semantic\Sample\2.cs" />
+    <None Include="data\semantic\Sample\3.cs" />
+    <None Include="data\semantic\Sample\4.cs" />
+    <None Include="data\cgen\45.cs" />
+    <None Include="data\semantic\Sample\5.cs" />
+    <Compile Include="semantic\SymbolTableTests.cs" />
+    <Compile Include="UsingDirectives.cs" />
+    <Compile Include="xunit.extensions\CSVData.cs" />
+    <None Include="data\semantic\symbolTable\SymbolTableErrorsCountTestBad.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="data\semantic\typechecker\enum_struct_1.cs" />
+    <None Include="data\semantic\objectheirarchy\bad\2\2.cs" />
+    <None Include="data\semantic\objectheirarchy\bad\3\3.cs" />
+    <None Include="data\semantic\objectheirarchy\good\7\7.cs" />
+    <None Include="data\semantic\objectheirarchy\bad\4\4.cs" />
+    <None Include="data\semantic\objectheirarchy\bad\4\4.1.cs" />
+    <None Include="data\semantic\objectheirarchy\bad\4\4.2.cs" />
+    <None Include="data\semantic\objectheirarchy\good\8\8.cs" />
+    <None Include="data\semantic\objectheirarchy\objectlayout_lookup.cs" />
+    <None Include="data\semantic\symbolTable\bad\1\1.cs" />
+    <Compile Include="Mangler\ExtractNumber.cs" />
+    <Compile Include="Mangler\DemangleTests.cs" />
+    <Compile Include="Mangler\ManglingTests.cs" />
+    <Compile Include="semantic\ObjectLayoutLookupTests.cs" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="data\llvm-as\main.ll" />
+    <None Include="data\parser\ParseErrorsCountTestGood.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="data\parser\bad\1.cs">
+      <SubType>
+      </SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="data\parser\bad\2.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="data\parser\bad\4.cs" />
+    <None Include="data\parser\bad\3.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="data\parser\good\1.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="data\parser\good\10.cs" />
+    <None Include="data\parser\good\11.cs" />
+    <None Include="data\parser\good\12.cs" />
+    <None Include="data\parser\good\13.cs" />
+    <None Include="data\parser\good\14.cs" />
+    <None Include="data\parser\good\15.cs" />
+    <None Include="data\parser\good\16.cs" />
+    <None Include="data\parser\good\17.cs" />
+    <None Include="data\parser\good\18.cs" />
+    <None Include="data\parser\good\19.cs" />
+    <None Include="data\parser\good\2.cs" />
+    <None Include="data\parser\good\20.cs" />
+    <None Include="data\parser\good\21.cs" />
+    <None Include="data\parser\good\22.cs" />
+    <None Include="data\parser\good\23.cs" />
+    <None Include="data\parser\good\24.cs" />
+    <None Include="data\parser\good\25.cs" />
+    <None Include="data\parser\good\26.cs" />
+    <None Include="data\parser\good\27.cs" />
+    <None Include="data\parser\good\28.cs" />
+    <None Include="data\parser\good\29.cs" />
+    <None Include="data\parser\good\3.cs" />
+    <None Include="data\parser\good\30.cs" />
+    <None Include="data\parser\good\31.cs" />
+    <None Include="data\parser\good\32.cs" />
+    <None Include="data\parser\good\33.cs" />
+    <None Include="data\parser\good\34.cs" />
+    <None Include="data\parser\good\35.cs" />
+    <None Include="data\parser\good\36.cs" />
+    <None Include="data\parser\good\37.cs" />
+    <None Include="data\parser\good\38.cs" />
+    <None Include="data\parser\good\39.cs" />
+    <None Include="data\parser\good\4.cs" />
+    <None Include="data\parser\good\40.cs" />
+    <None Include="data\parser\good\41.cs" />
+    <None Include="data\parser\good\42.cs" />
+    <None Include="data\parser\good\43.cs" />
+    <None Include="data\parser\good\44.cs" />
+    <None Include="data\parser\good\45.cs" />
+    <None Include="data\parser\good\46.cs" />
+    <None Include="data\parser\good\47.cs" />
+    <None Include="data\parser\good\48.cs" />
+    <None Include="data\parser\good\49.cs" />
+    <None Include="data\parser\good\5.cs" />
+    <None Include="data\parser\good\50.cs" />
+    <None Include="data\parser\good\51.cs" />
+    <None Include="data\parser\good\52.cs" />
+    <None Include="data\parser\good\53.cs" />
+    <None Include="data\parser\good\54.cs" />
+    <None Include="data\parser\good\55.cs" />
+    <None Include="data\parser\good\56.cs" />
+    <None Include="data\parser\good\57.cs" />
+    <None Include="data\parser\good\6.cs" />
+    <None Include="data\parser\good\7.cs" />
+    <None Include="data\parser\good\8.cs" />
+    <None Include="data\parser\good\9.cs" />
+    <None Include="data\parser\good\58.cs" />
+    <None Include="data\parser\good\59.cs" />
+    <None Include="data\parser\good\60.cs" />
+    <None Include="data\parser\good\61.cs" />
+    <Compile Include="Assembler\AssemblerTests.cs" />
+    <None Include="data\parser\good\62.cs" />
+    <None Include="data\parser\good\63.cs" />
+    <None Include="data\parser\good\64.cs" />
+    <None Include="data\semantic\objectheirarchy\SemanticErrorsCountTestBad.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="data\semantic\objectheirarchy\good\1\1.cs" />
+    <None Include="data\semantic\objectheirarchy\bad\1\1.cs" />
+    <None Include="data\semantic\objectheirarchy\good\2\defualtParentClass.cs" />
+    <None Include="data\semantic\objectheirarchy\good\3\3.cs" />
+    <None Include="data\semantic\objectheirarchy\good\4\4.cs" />
+    <None Include="data\semantic\objectheirarchy\good\5\5.cs" />
+    <None Include="data\semantic\objectheirarchy\good\6\6.cs" />
+    <None Include="data\semantic\objectheirarchy\good\5\5-1.cs" />
+    <Compile Include="semantic\ObjectHierarchyParentClassTests.cs" />
+    <Compile Include="Helpers\_Helpers.cs" />
+    <Compile Include="Helpers\FileReader.cs" />
+    <Compile Include="Helpers\FileInfo.cs" />
+    <Compile Include="LLVMAssemblerTests.cs" />
+    <Compile Include="ParserTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="data\parser\ParseErrorsCountTestBad.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="data\semantic\objectheirarchy\SemanticErrorsCountTestGood.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\lsc\lsc.csproj">
+      <Project>{A4EDACDD-8E40-4F18-86F6-052B827FC9FF}</Project>
+      <Name>lsc</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>rmdir /s /q "data"
+xcopy "$(ProjectDir)data\*" "data" /siq
+copy /Y "$(ProjectDir)app.config" "$(TargetPath).config"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

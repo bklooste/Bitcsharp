@@ -1,0 +1,4 @@
+ErrorCodes,Description
+0,Successful
+1,Error Occurred
+2,Code Generator Not Specified
