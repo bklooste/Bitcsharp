@@ -18,7 +18,7 @@ OSTYPE = windows
 ARCH = x86
 
 ASM_ARCH = x86
-CC = llvm-gcc
+CC = clang
 ASM = i386-elf-as
 
 LOG_GC = 1

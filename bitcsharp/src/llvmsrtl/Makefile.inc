@@ -1,4 +1,4 @@
-prefix = /d/Prabir/Documents/Projects/llvmsharp/src/llvmsrtl
+prefix = /i/Backup/Skydrive/Documents/GitHub/Bitcsharp/bitcsharp/src/llvmsrtl
 
 include $(prefix)/config
 

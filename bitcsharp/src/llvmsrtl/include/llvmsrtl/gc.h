@@ -1,8 +1,8 @@
 #ifndef LLVMSRT_GC
     #define LLVMSRT_GC
 
-	#include <stdlib.h>
-	#include <stdio.h>
+	#include "stdlib.h"
+	#include "stdio.h"
 	#include <string.h>
 	#include <llvmsrtl/types.h>
 

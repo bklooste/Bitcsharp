@@ -5,7 +5,7 @@
     
     #if USE_C_STDLIB != 1
     
-        #include <llvmsrtl/stdlib_.h>
+//        #include <llvmsrtl/stdlib_.h>
         
         char* __llvmsharp_int_to_charp(int i)
         {

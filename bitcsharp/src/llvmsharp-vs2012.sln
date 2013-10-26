@@ -2,10 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A90E4D14-95E3-4942-A782-CEA00668EB0E}"
-	ProjectSection(SolutionItems) = preProject
-		llvmsharp.vsmdi = llvmsharp.vsmdi
-		semantic-todo.csv = semantic-todo.csv
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualAst", "VisualAst\VisualAst.csproj", "{CD8D463A-554F-4630-9E08-20C8B819D810}"
 EndProject
@@ -24,9 +20,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lsc", "lsc\lsc.csproj", "{A4EDACDD-8E40-4F18-86F6-052B827FC9FF}"
 EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = llvmsharp.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
