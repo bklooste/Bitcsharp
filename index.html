@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Bitcsharp : BitC# High performance LLVM compiler " />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Bitcsharp</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/bklooste/Bitcsharp">View on GitHub</a>
+
+          <h1 id="project_title">Bitcsharp</h1>
+          <h2 id="project_tagline">BitC# High performance LLVM compiler </h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/bklooste/Bitcsharp/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/bklooste/Bitcsharp/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>BitC# High performance LLVM compiler
+     Key features 
+         - Very low global pause allocation 10-30 ms<br>
+         - Allocation is tunable between high performance ( within 3% of malloc)  and low global pauses
+         - Sub typing we retain support for inheritance  to port C#/Java and C++ code. Eventualy we will merge with Bitc or if that does not eventuate adopt a sucinct Trait based type system.
+         - SIMD expression as part of the language , not platform specific intrinsics.. Express problems in a way that will allow the compiler to use parralel SIMD for up to 10* performance.
+         - Support for embedded arrays in objects for native interop. 
+         - Whole object life pinning for easy interop
+         - Call C libs or use BitC# as a lib for existing C / C++ /C# 
+         - Slices , UTF8 strings and special format provide very printing strings to an IO buffer
+         - Fast IO with no copy needed to and from managed space.<br>
+         - Very low safety impact no Header , no CardTable , optional bounds checking .</p>
+
+<p>Comparison to C#</p>
+
+<ul>
+<li>Can work with native objects </li>
+<li>Superior support for value types ( no auto boxing and arrays embedded in objects) </li>
+<li>Call native and Be called by native</li>
+<li>Static compile to binary so can be deployed without CLR. </li>
+<li>Low pause GC</li>
+<li>No managed costs</li>
+<li>Easy to write SIMD </li>
+</ul><p>Comparison to Rust/D</p>
+
+<ul>
+<li>Simple to program </li>
+<li>Easy to write high performance SIMD </li>
+<li>Higher level style. </li>
+</ul><p>Comparison to C/C++</p>
+
+<ul>
+<li>Fast to program </li>
+<li>Safe</li>
+<li>Quicker to write high performing programs</li>
+</ul><p>Mile stones 
+Use Mono compiler &amp; parser .( No Generics , prob C#1 ) ( Cancelled using Coco/R) </p>
+
+<p>M1 Update and build compiler  ( update code from LLVM# to generate LLVM IR) , 1 month ( 2-3 months later to mature it) 
+M1.1 Update to LLVM 3.4 ( 1 week) 
+M1.2 Rewrite Tests , add test runner and get mono tests ( 2 weeks)<br>
+M2 Add ref counting for allocations ( just a malloc wrap at this point) 1/2 - 1 week + 2 week for tests<br>
+M2.1 More testing 
+M3 Remove unsafe from fixed blocks by having a safe way to address it (slices or gen array code)  and add compile failure on auto boxing if type is marked nobox.. This is very tricky in C#. 2 weeks + slices ?
+M4 Upgrade GC to  add no header on Nursery objects , block allocated nursery ( local thread allocator)  , with a global pause and parralel mark/ sweep .  Small global pauses  is obviously small nursery.2 weeks.
+M5 Add better allocation to main Nursery  . Extensive Benchmarks . 2 weeks
+M6 Add Slices and strings standard lib. 2 weeks
+M7 Add VecImp  , 2 months
+M8 Add Cinterop ( which users can use to host as winrt objects) . 1 week 
+M9 Deploy LLVM execution engine libs as default , native as option.  No Bounds checking on  Single threaded release code.
+M10 Remove cycles , 1 month </p>
+
+<p>Longer term goals </p>
+
+<ul>
+<li>Traits and fast coding.</li>
+<li>Region system to move code onto the stack automatically, resulting in lower heap usage and higher performance.</li>
+</ul><p>you can check out the new branch:</p>
+
+<pre><code>$ cd your_repo_root/repo_name
+$ git fetch origin
+$ git checkout gh-pages
+</code></pre>
+
+<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+
+<h3>
+<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+
+<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+
+<h3>
+<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+
+<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+
+<h3>
+<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+
+<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+
+<h3>
+<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+
+<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Bitcsharp maintained by <a href="https://github.com/bklooste">bklooste</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
