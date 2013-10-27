@@ -28,10 +28,12 @@ Coco/R itself) does not fall under the GNU General Public License.
 using System;
 using System.IO;
 using System.Collections;
+using LLVMSharp.Compiler.CocoR;
+using System.Diagnostics;
 
 -->namespace
 
-public class Token {
+public class Token :IToken {
 	public int kind;    // token kind
 	public int pos;     // token position in bytes in the source text (starting at 0)
 	public int charPos;  // token position in characters in the source text (starting at 0)
@@ -39,6 +41,22 @@ public class Token {
 	public int line;    // token line (starting at 1)
 	public string val;  // token value
 	public Token next;  // ML 2005-03-11 Tokens are kept in linked list
+
+	#region IToken Members
+
+    public int LineNumber
+    {
+        [DebuggerStepThrough]
+        get { return line; }
+    }
+
+    public int ColumnNumber
+    {
+        [DebuggerStepThrough]
+        get { return col; }
+    }
+
+    #endregion
 }
 
 //-----------------------------------------------------------------------------------
@@ -255,6 +273,7 @@ public class Scanner :IScanner {
 	
 	public Scanner (string fileName) {
 		try {
+		    _fileName = fileName;
 			Stream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
 			buffer = new Buffer(stream, false);
 			Init();
@@ -377,5 +396,16 @@ public class Scanner :IScanner {
 
 	// make sure that peeking starts at the current scan position
 	public void ResetPeek () { pt = tokens; }
+
+	#region IScanner Members
+
+    readonly string _fileName;
+    public string FileName
+    {
+        [DebuggerStepThrough]
+        get { return _fileName; }
+    }
+
+    #endregion
 
 } // end Scanner
